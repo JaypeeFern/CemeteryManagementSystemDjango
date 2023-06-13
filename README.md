@@ -13,6 +13,15 @@ https://github.com/JaypeeFern/CemeteryManagementSystem/assets/103358200/3d543b32
 1. Python
 2. Venv (Package)
 
+Install all packages by using this command pip install -r requirements.txt
+
+
+
+
+
+
+
+
 
 
 
