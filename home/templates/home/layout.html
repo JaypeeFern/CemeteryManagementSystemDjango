@@ -1,0 +1,41 @@
+{% load static %}
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+  <link href="{% static 'home/scss/custom.css'%}" rel="stylesheet">
+  <link href="{% static 'home/node_modules/bootstrap-icons/font/bootstrap-icons.css' %}" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/MaterialDesign-Webfont/7.0.96/css/materialdesignicons.min.css">
+  <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+
+  <script src="{% static 'home/vendors/bootstrap/js/bootstrap.bundle.min.js'%}"></script>
+  <script src="{% static 'home/node_modules/sweetalert2/dist/sweetalert2.all.min.js' %}"></script>
+  <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+
+  <script src="{% static 'home/js/rules.js' %}" defer></script>
+
+  <script src='https://www.google.com/recaptcha/api.js'></script>
+
+  <title>Surigao Memorial Park</title>
+  <link rel="icon" type="image/x-icon" href="{% static 'home/assets/test.svg' %}">
+
+</head>
+
+<body>
+{% include 'home/home-nav.html' %}
+{% block body %}
+{% endblock %}
+<script>
+    AOS.init();
+</script>
+{% load sweetify %}
+{% sweetify %}
+</body>
+</html>

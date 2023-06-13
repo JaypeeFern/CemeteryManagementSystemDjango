@@ -1,0 +1,121 @@
+<form method="POST" action="{% url 'customerForm' %}">
+  {% csrf_token %}
+   <!-- 1st Divider -->
+   <div class="row mb-2">
+      <div class="col-12">
+        <h6 class="d-inline-flex fs-6 fs- lead text-memorial">Customer Information</h6>
+      </div>
+      <div class="d-none">
+        <hr class="text-success border-2">
+      </div>
+    </div>
+    <!--  -->
+    
+    <!-- Buyer Information -->
+    <div class="row">
+      <input type="hidden" name="submitted_by" value="{{request.user.id}}">
+      <div class="col-12 col-sm-12 col-md-12 col-lg-4 col-xl-4 col-xxl-4">
+        <div class="form-floating">
+          {{ form.first_Name }}
+          <label for="floatingName">First Name</label>
+        </div>
+      </div>
+      <div class="col-12 col-sm-12 col-md-12 col-lg-4 col-xl-4 col-xxl-4 my-2 my-md-2 my-lg-0">
+        <div class="form-floating">
+          {{ form.last_Name }}
+          <label for="floatinglastName">Last Name</label>
+        </div>
+      </div>
+      <div class="col-12 col-sm-12 col-md-12 col-lg-4 col-xl-4 col-xxl-4">
+        <div class="form-floating">
+          {{ form.contact_Number }}
+          <label for="floatingContact">Contact Number</label>
+        </div>
+      </div>
+    </div>
+    <!--  -->
+  
+    <!-- 2nd Divider -->
+    <div class="row mt-3">
+      <div class="col-12">
+        <p class="d-inline-flex fs-6 lead text-memorial">Deceased Information</p>
+      </div>
+      <div class="d-none">
+        <hr class="text-success border-2">
+      </div>
+    </div>
+    <!--  -->
+  
+    <!-- Deceased Information -->
+    <div class="row">
+      <div class="col-12 col-sm-12 col-md-12 col-lg-4 col-xl-4 col-xxl-4">
+        <div class="form-floating">
+          {{ form.deceased_Name }}
+          <label for="floatingDeceasedName">Name of Deceased</label>
+        </div>
+      </div>
+      <div class="col-12 col-sm-12 col-md-12 col-lg-4 col-xl-4 col-xxl-4 my-2 my-md-2 my-lg-0">
+        <div class="form-floating">
+          {{ form.born_Date }}
+          <label for="floatingDeceasedBirth">Birth Date</label>
+        </div>
+      </div>
+      <div class="col-12 col-sm-12 col-md-12 col-lg-4 col-xl-4 col-xxl-4">
+        <div class="form-floating">
+          {{ form.died_Date }}
+          <label for="floatingDeceasedDied">Died Date</label>
+        </div>
+      </div>
+    </div>
+    <!--  -->
+  
+    <!-- 3nd Divider -->
+    <div class="row mt-3">
+      <div class="col-12">
+        <p class="d-inline-flex fs-6 lead text-memorial">Internment Schedule</p>
+      </div>
+      <div class="d-none ">
+        <hr class="text-success border-2">
+      </div>
+    </div>
+    <!--  -->
+    
+    <!-- Internment Schedule -->
+    <div class="row">
+      <div class="col-12 col-sm-12 col-md-12 col-lg-4 col-xl-4 col-xxl-4">
+        <div class="form-floating">
+          {{ form.burial_Schedule }}
+          <label for="floatingDeceasedBuriel">Burial Schedule</label>
+        </div>
+      </div>
+      <div class="col-12 col-sm-12 col-md-12 col-lg-4 col-xl-4 col-xxl-4 my-2 my-md-2 my-lg-0">
+        <div class="form-floating">
+          <select name="chosen_Lot" class="form-select" id="floatingChosenLot" required>
+            <option value="{{data.Garden_Name.id}}" selected>{{data.Garden_Name}}</option>
+          </select>
+          <label for="floatingChosenLot">Chosen Lot</label>
+        </div>
+      </div>
+      <div class="col-12 col-sm-12 col-md-12 col-lg-4 col-xl-4 col-xxl-4">
+        <div class="form-floating">
+          <select name="chosen_Lot_Type" class="form-select" id="floatingChosenLotType" required="">
+            <option selected>---------</option>
+            {% for data in data.Lot_Type.all %}
+            <option value="{{data.id}}">{{data.Lot_Name}}</option>
+            {% endfor %}
+          </select>
+          <label for="floatingChosenLotType">Chosen Lot Type</label>
+        </div>
+      </div>
+    </div>
+    <!--  -->
+  
+    <div class="row mt-3">
+      <div class="modal-footer">
+        <div class="col-12 d-flex justify-content-between">
+          <button type="button" class="btn btn-success" data-bs-dismiss="modal">Cancel</button>
+          <button type="submit" class="btn btn-success">Submit</button>
+        </div>
+      </div>
+    </div>
+  </form>

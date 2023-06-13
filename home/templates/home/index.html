@@ -1,0 +1,242 @@
+{% extends "home/layout.html" %}
+{% block body %}
+{% load static %}
+
+<!-- Body -->
+<div class="main">
+    <section class="main-body d-flex align-items-center">
+        <div class="container" data-aos="zoom-out" data-aos-delay="500" data-aos-duration="1000">
+            <div class="row">
+                <div class="col-12 d-flex justify-content-center text-center main-header display-7 fw-bold p-2 text-white">
+                    <span>SURIGAO MEMORIAL PARK</span>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-12 fs-5 d-flex justify-content-center text-center p-2 text-white lead">
+                    <span>Established 1987, A Private Cemetery in Surigao City, Philippines</span>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+
+<div id="body3" class="d-flex flex-column mt-5 mb-5 pt-3 pb-3 me-0 ms-0">
+    <div class="row m-0">
+        <div class="carousel-text col">
+            <div class="row-cols m-0">
+                <div class="col- fw-bold display-5 mb-auto mt-auto me-auto ms-auto p-4 text-uppercase fst-italic text-center text-memorial">About the Company</div>
+                <div class="col lead fs-4 me-auto ms-auto col-11 mb-3 mt-2">
+                    <div class="mb-2">The Surigao Memorial Park is the first and only private cemetery in Surigao City. It is operated  by Surigao Memorial Park, Incorporated, a SEC-registered company.</div>
+                    <div class="mb-2">The SMPI is headed by a Board of Directors and run by professional managers who have carefully planned the daily upkeep, management and future direction of the park since 1987.</div>
+                </div>
+            </div>
+        </div>
+        <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl col-xxl mt-auto mb-auto px-0">
+            <div class="carousel slide" data-bs-ride="carousel">
+                <div class="carousel-inner">
+                    <div class="carousel-item active">
+                        <img src="{% static 'home/assets/1.jpg' %}" class="d-block w-100" alt="..." style="border-radius: .3rem;">
+                    </div>
+                    <!-- <div class="carousel-item">
+                        <img src="{% static 'home/assets/2.jpg' %}" class="d-block w-100" alt="...">
+                    </div>
+                    <div class="carousel-item">
+                        <img src="{% static 'home/assets/3.jpg' %}" class="d-block w-100" alt="...">
+                    </div> 
+                    <div class="carousel-item">
+                        <img src="{% static 'home/assets/4.jpg' %}" class="d-block w-100" alt="...">
+                    </div> 
+                     <div class="carousel-item">
+                        <img src="{% static 'home/assets/5.jpg' %}" class="d-block w-100" alt="...">
+                    </div>  -->
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- <div class="content-1">
+    <section class="features" style="padding: 50px 0;">
+        <div class="container aos-init aos-animate">
+            <div class="section-title">
+                <h2>Features</h2>
+            </div>
+            <div class="row">
+                <div class="col-md-6 col-lg-4 d-flex align-items-stretch mb-5 mb-lg-0">
+                    <div class="icon-box">
+                        <div class="icon"><i class="bi bi-search"></i></div>
+                        <h4 class="title"><a href="">Deceased Search</a></h4>
+                        <p class="description">Search information about your loved ones, with a intuitive and feature
+                            rich search system consisting of Live Search, Filter Capability, and Sorting Function</p>
+                    </div>
+                </div>
+                <div class="col-md-6 col-lg-4 d-flex align-items-stretch mb-5 mb-lg-0">
+                    <div class="icon-box">
+                        <div class="icon"><i class="bi bi-geo-alt"></i></div>
+                        <h4 class="title"><a href="">Grave Locator</a></h4>
+                        <p class="description">If you want to check on the status of your loved ones grave. This feature
+                            is the one to use. It allows you to see the latest photo image of their grave as well as
+                            where it is located</p>
+                    </div>
+                </div>
+                <div class="col-md-6 col-lg-4 d-flex align-items-stretch mb-5 mb-lg-0">
+                    <div class="icon-box">
+                        <div class="icon"><i class="bi bi-border-all"></i></div>
+                        <h4 class="title"><a href="">Lot Procurement</a></h4>
+                        <p class="description">Fast and easy reservation of cemetery lots is this features main
+                            function. It makes the lot purchasing process easier</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</div> -->
+
+<!-- <div class="content-2 mb-5">
+    <section id="about" class="about section-bg">
+        <div class="container aos-init aos-animate" data-aos="fade-up" data-aos-delay="300" data-aos-duration="1000">
+            <div class="section-title">
+                <h2>About</h2>
+                <h3>Find Out More About <span>SMPI INC.</span></h3>
+                <p class="text-uppercase fst-italic">"A home for our dearly departed."</p>
+            </div>
+            <div class="row">
+                <div class="col-lg-6 d-flex justify-content-center"> 
+                    <img src="{% static 'home/assets/memorial-logo.svg' %}" class="img-fluid w-50" alt="">
+                </div>
+                <div class="col-lg-6 pt-4 pt-lg-0 content d-flex flex-column justify-content-center">
+                    <h3><span style="color: #187639;">Surigao Memorial Park</span>, for practical purposes, serves as a place for burying the human remains. </h3>
+                    <p class="fst-italic"> However, it is also place where memories of loved ones who have passed away are enshrined.Thus, it is valued by the people of Surigao City, because, as we in SMPI say, “Memories are forever.”</p>
+                    <ul>
+                        <li> <i class="bi bi-1-circle"></i>
+                            <div>
+                                <p>It should also be perceived as a community asset because it is entrusted with honoring the past, and it provides an open space as well as a panoramic vista of the sea and the hills surrounding it. Thus, we, the living Surigaonons and our visitors have a place to revisit our past</p>
+                            </div>
+                        </li>
+                        <li> <i class="bi bi-2-circle"></i>
+                            <div>
+                                <p>and also enjoy the breathtaking view of the green hills and blue seas surrounding our cemetery park, a place we all can be proud of. With the initial acquisition of five hectares, the park has grown to more than 18 hectares of sloping hills overlooking the city.</p>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>    
+</div> -->
+
+<!-- Footer Start -->
+<div class="container-fluid bg-memorial">
+    <footer class="py-2 my-0 mb-0">
+        <div class="row p-2">
+            <div class="col-12 col-lg-6 d-flex justify-content-center text-center justify-content-lg-start mb-0 text-white mt-auto mb-auto"
+                style="font-size: .9em;">
+                © 2022 Surigao Memorial Park Inc. - All rights reserved.
+            </div>
+            <!-- <div class="col-12 col-lg-6 d-flex justify-content-center justify-content-lg-end">
+                <ul class="nav list-unstyled text-white lead fs-6">
+                    <li class="nav-item"><a href="#" class="nav-link px-2 text-white">Home</a></li>
+                    <li class="nav-item"><a href="#" class="nav-link px-2 text-white">Features</a></li>
+                    <li class="nav-item"><a href="#" class="nav-link px-2 text-white">Pricing</a></li>
+                    <li class="nav-item"><a href="#" class="nav-link px-2 text-white">FAQs</a></li>
+                    <li class="nav-item"><a href="#" class="nav-link px-2 text-white">About</a></li>
+                </ul>
+            </div> -->
+        </div>
+
+    </footer>
+</div>
+<!-- Footer End -->
+
+<!-- Other -->
+
+<!-- Logout Modal -->
+<div class="modal fade" id="logout_modal" data-bs-backdrop="static" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" style="width: 20rem;">
+        <div class="modal-content text-center">
+            <div class="modal-body">
+                <div class="fs-6">Are you sure you want to sign out?</div>
+
+                <a style="text-decoration: none;" href="{% url 'Logout' %}">
+                    <div class="mt-2 d-grid gap-2 col-6 mx-auto">
+                        <input type="submit" class="btn btn-success" href="" value="Proceed">
+                    </div>
+                </a>
+
+                <div class="mt-2 d-grid gap-2 col-6 mx-auto">
+                    <input type="submit" class="btn btn-outline-success" data-bs-dismiss="modal" value="Cancel">
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Logout Modal End -->
+
+<!-- Login -->
+{% include 'home/login.html' %}
+<!-- Login End -->
+
+<!-- Register -->
+{% include 'home/register.html' %}
+<!-- Register End -->
+
+<!-- -------------------------------- Rules -------------------------------- -->
+
+
+<script>
+    $(document).ready(function () {
+
+        $("a[href*=#]").click(function (event) {
+            event.preventDefault();
+            $('html,body').animate({
+                scrollTop: $(this.hash).offset().top
+            }, 500);
+        });
+
+
+        // document ready  
+    });
+</script>
+
+  <script>
+    const tabItems = document.querySelectorAll('.tab-item');
+    const tabContentItems = document.querySelectorAll('.tab-content-item');
+
+    // Select tab content item
+    function selectItem(e) {
+    // Remove all show and border classes
+    removeBorder();
+    removeShow();
+    // Add border to current tab item
+    this.classList.add('tab-border');
+    // Grab content item from DOM
+    const tabContentItem = document.querySelector(`#${this.id}-content`);
+    // Add show class
+    tabContentItem.classList.add('show');
+    }
+
+    // Remove bottom borders from all tab items
+    function removeBorder() {
+    tabItems.forEach(item => {
+    item.classList.remove('tab-border');
+    });
+    }
+
+    // Remove show class from all content items
+    function removeShow() {
+    tabContentItems.forEach(item => {
+    item.classList.remove('show');
+    });
+    }
+
+    // Listen for tab item click
+    tabItems.forEach(item => {
+    item.addEventListener('click', selectItem);
+    });
+  </script>
+
+
+{% endblock %}
+
+

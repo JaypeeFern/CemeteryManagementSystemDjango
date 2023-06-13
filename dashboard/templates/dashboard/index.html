@@ -1,0 +1,545 @@
+{% extends "dashboard/layout.html" %}3
+{% block body %}
+{% load static %}
+
+<div class="container-scroller d-flex">
+    <!-- partial:./partials/_sidebar.html -->
+    {% include 'dashboard/components/sidebar.html' %}
+    <!-- partial -->
+    <div class="container-fluid page-body-wrapper">
+      <!-- partial:./partials/_navbar.html -->
+    {% include 'dashboard/components/topnav.html' %}
+      <!-- partial -->
+      <div class="main-panel">
+        <div class="content-wrapper">
+
+          <div class="row mb-4">
+            <div class="col-6 col-lg-4 col-xxl-3">
+              <div class="card mb-3 border-secondary" style="max-width: 540px;">
+                <div class="row g-0">
+                  <div class="col-md-4 d-flex justify-content-center bg-success">
+                    <i class="mt-auto mb-auto mdi mdi-information-outline text-white icon-lg"></i>
+                  </div>
+                  <div class="col-md-8">
+                    <div class="card-body">
+                      <h5 class="card-title text-center">Deceased Data</h5>
+                      <p class="card-text text-center display-3 fw-bolder text-success">{{c_deceased_info}}</p>
+                      <p class="card-text text-center"><small class="text-muted">Last updated  <br>{{latest_deceased.date_created|timesince}} ago.</small></p>
+                    </div>
+                    <a href="{% url 'Dash_Search' %}" class="text-decoration-none text-white">
+                      <div class="card-footer bg-success text-md-end text-start" style="border-radius: 0%;">
+                        Goto Page <i class="mdi mdi-arrow-right"></i>
+                      </div>
+                    </a>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-6 col-lg-4 col-xxl-3">
+              <div class="card mb-3 border-secondary" style="max-width: 540px;">
+                <div class="row g-0">
+                  <div class="col-md-4 d-flex justify-content-center bg-success">
+                    <i class="mt-auto mb-auto mdi mdi-information-outline text-white icon-lg"></i>
+                  </div>
+                  <div class="col-md-8">
+                    <div class="card-body">
+                      <h5 class="card-title text-center">Current Customers {{test.date_created|timesince}}</h5>
+                      <p class="card-text text-center display-3 fw-bolder text-success">{{c_customers}}</p>
+                      <p class="card-text text-center"><small class="text-muted">Last customer <br>{{latest_customer.date_created|timesince}} ago</small></p>
+                    </div>
+                    <a href="{% url 'Customer' %}" class="text-decoration-none text-white">
+                      <div class="card-footer bg-success text-md-end text-start" style="border-radius: 0%;">
+                        Goto Page <i class="mdi mdi-arrow-right"></i>
+                      </div>
+                    </a>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-6 col-lg-4 col-xxl-3">
+              <div class="card mb-3 border-secondary" style="max-width: 540px;">
+                <div class="row g-0">
+                  <div class="col-md-4 d-flex justify-content-center bg-success">
+                    <i class="mt-auto mb-auto mdi mdi-information-outline text-white icon-lg"></i>
+                  </div>
+                  <div class="col-md-8">
+                    <div class="card-body">
+                      <h5 class="card-title text-center">Gardens</h5>
+                      <p class="card-text text-center display-3 fw-bolder text-success">{{c_gardens}}</p>
+                      <p class="card-text text-center"><small class="text-muted">Last updated <br>{{latest_location.date_created|timesince}} ago</small></p>
+                    </div>
+                    <a href="{% url 'Locations' %}" class="text-decoration-none text-white">
+                      <div class="card-footer bg-success text-md-end text-start" style="border-radius: 0%;">
+                        Goto Page <i class="mdi mdi-arrow-right"></i>
+                      </div>
+                    </a>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-6 col-lg-4 col-xxl-3">
+              <div class="card mb-3 border-secondary" style="max-width: 540px;">
+                <div class="row g-0">
+                  <div class="col-md-4 d-flex justify-content-center bg-success">
+                    <i class="mt-auto mb-auto mdi mdi-information-outline text-white icon-lg"></i>
+                  </div>
+                  <div class="col-md-8">
+                    <div class="card-body">
+                      <h5 class="card-title text-center">Lot Types</h5>
+                      <p class="card-text text-center display-3 fw-bolder text-success">{{c_lot_types}}</p>
+                      <p class="card-text text-center"><small class="text-muted">Last updated <br>{{latest_lottype.date_created|timesince}} ago</small></p>
+                    </div>
+                    <a href="{% url 'LotTypes' %}" class="text-decoration-none text-white">
+                      <div class="card-footer bg-success text-md-end text-start" style="border-radius: 0%;">
+                        Goto Page <i class="mdi mdi-arrow-right"></i>
+                      </div>
+                    </a>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-6 col-lg-4 col-xxl-3">
+              <div class="card mb-3 border-secondary">
+                <div class="row g-0">
+                  <div class="col-md-4 d-flex justify-content-center bg-success">
+                    <i class="mt-auto mb-auto mdi mdi-information-outline text-white icon-lg"></i>
+                  </div>
+                  <div class="col-md-8">
+                    <div class="card-body">
+                      <h5 class="card-title text-center">Registered Accounts</h5>
+                      <p class="card-text text-center display-3 fw-bolder text-success">{{c_accounts}}</p>
+                      <p class="card-text text-center"><small class="text-muted">Last registration <br>{{latest_user.date_joined|timesince}} ago.</small></p>
+                    </div>
+                    <a class="text-decoration-none text-white">
+                      <div class="card-footer bg-success text-md-end text-start text-muted" style="border-radius: 0%;">
+                        Goto Page <i class="mdi mdi-arrow-right"></i>
+                      </div>
+                    </a>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <hr>
+
+          <div class="container-fluid">
+            <h1 class="text-center fs-2">Sales Charts</h1>
+          </div>
+
+          <hr>
+
+          <ul class="nav nav-pills d-flex justify-content-center" id="pills-tab" role="tablist">
+            <li class="nav-item" role="presentation">
+              <button class="nav-link active bg-success link-secondary" id="sales-thisday-tab" data-bs-toggle="pill" data-bs-target="#sales-thisday" type="button" role="tab" aria-controls="pills-home" aria-selected="true">Today</button>
+            </li>
+            <li class="nav-item" role="presentation">
+              <button class="nav-link bg-success link-secondary" id="sales-thismonth-tab" data-bs-toggle="pill" data-bs-target="#sales-thismonth" type="button" role="tab" aria-controls="pills-profile" aria-selected="false">Month</button>
+            </li>
+            <li class="nav-item" role="presentation">
+              <button class="nav-link bg-success link-secondary" id="sales-thisyear-tab" data-bs-toggle="pill" data-bs-target="#sales-thisyear" type="button" role="tab" aria-controls="pills-contact" aria-selected="false">Year</button>
+            </li>
+          </ul>
+
+          <div class="tab-content" id="pills-tabContent">
+            <div class="tab-pane fade show active" id="sales-thisday" role="tabpanel" aria-labelledby="sales-thisday-tab">
+              <div class="card border border-1 border-secondary">
+                <h5 class="card-header bg-success text-white">Lot Sold: Today</h5>
+                  <div class="card-body">
+                      <canvas id="soldLotsToday"></canvas>
+                  </div>
+              </div>
+            </div>
+            <div class="tab-pane fade" id="sales-thismonth" role="tabpanel" aria-labelledby="sales-thismonth-tab">
+              <div class="card border border-1 border-secondary">
+                <h5 class="card-header bg-success text-white">Lot Sold: Monthly</h5>
+                  <div class="form">
+                    <form method="POST" action="{% url 'FilterMonth' %}">
+                      {% csrf_token %}
+                      <div class="row form-group d-flex justify-content-evenly mt-3">
+                        <div class="col-7 col-md-4">
+                            <input type="month" name="month_of" class="from-control col-12 mb-3" value="{% now "Y-m" %}">
+                            <button type="submit" class="btn btn-sm btn-success col-12">Filter</button>
+                        </div>
+                      </div>
+                    </form>
+                  </div>                
+                  <div class="card-body mt-0 pt-0">
+                      <canvas id="soldLotsThisMonth"></canvas>
+                  </div>
+              </div>
+            </div>
+            <div class="tab-pane fade" id="sales-thisyear" role="tabpanel" aria-labelledby="sales-thisyear-tab">
+              <div class="card border border-1 border-secondary">
+                <h5 class="card-header bg-success text-white">Lot Sold: Yearly</h5>
+                  <div class="form">
+                    <form method="POST" action="{% url 'FilterYear' %}">
+                      {% csrf_token %}
+                      <div class="row form-group d-flex justify-content-evenly mt-3">
+                        <div class="col-7 col-md-4">
+                          <select class="form-control col-12 mb-3" id="year" name="year_of">
+                            <option value=""></option>
+                          </select>
+                          <button type="submit" class="btn btn-sm btn-success col-12">Filter</button>
+                        </div>
+                      </div>
+                    </form>
+                  </div>   
+                  <div class="card-body mt-0 pt-0">
+                      <canvas id="soldLotsThisYear"></canvas>
+                  </div>
+              </div>
+            </div>
+          </div>
+
+          </div>
+
+          <!-- <div class="row">
+            <div class="col-lg-12 grid-margin stretch-card">
+              <div class="card">
+                <div class="card-body">
+                  <h4 class="card-title">Garden Statistics Review</h4>
+                  <div class="table-responsive">
+                    <table class="table table-striped">
+                      <thead>
+                        <tr>
+                          <th>Garden Name</th>
+                          <th>Current Amount Occupied</th>
+                          <th>Latest Addition</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+             
+                        <tr>
+                          <td class="fw-bold fs-6">{{data.}}</td>
+                          <td>{{data.}}</td>
+                          <td>{{data.}}</td>
+                        </tr>
+                   
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div> -->
+
+        </div>
+        <!-- content-wrapper ends -->
+        <!-- partial:./partials/_footer.html -->
+        {% include 'dashboard/components/footer.html' %}
+        <!-- partial -->
+      </div>
+      <!-- main-panel ends -->
+    </div>
+    <!-- page-body-wrapper ends -->
+  </div>
+  <!-- container-scroller -->
+  
+  <!-- ----------------------------------------------------------------------- -->
+  <!--                                 Notice                                  -->
+  <!-- ----------------------------------------------------------------------- -->
+
+  <!-- ----------------------------------------------------------------------- -->
+  <!-- --------- If your code editor shows errors on the code below ---------- -->
+  <!-- ----------------------------------------------------------------------- -->
+  <!-- ----------------------------------------------------------------------- -->
+  <!--          please disregard it as it is a Django template code.           -->
+  <!-- ----------------------------------------------------------------------- -->
+  <!-- ----------------------------------------------------------------------- -->
+  <!--                    It will work fine on the browser.                    -->
+  <!-- ----------------------------------------------------------------------- -->
+
+
+  <!-- ----------------------------- Today Chart ----------------------------- -->
+  <script>
+    Chart.register(ChartDataLabels);
+    const ctx = document.getElementById('soldLotsToday');
+    new Chart(ctx, {
+      type: 'bar',
+      data: {
+        labels: [{% for data in all_locations %}'{{data.grave_area}}',{% endfor %}],
+        datasets: [{
+          label: 'Lot Sold',
+          data: [{% for data in customers_current_day.all %}{{data.lot_chosen}},{% endfor %}],
+          borderColor: [
+            'rgba(255, 99, 132, 0.2)',
+            'rgba(54, 162, 235, 0.2)',
+            'rgba(255, 206, 86, 0.2)',
+            'rgba(75, 192, 192, 0.2)',
+            'rgba(153, 102, 255, 0.2)',
+            'rgba(255, 159, 64, 0.2)'
+          ],
+          backgroundColor: [
+            'rgba(255, 99, 132, 1)',
+            'rgba(54, 162, 235, 1)',
+            'rgba(255, 206, 86, 1)',
+            'rgba(75, 192, 192, 1)',
+            'rgba(153, 102, 255, 1)',
+            'rgba(255, 159, 64, 1)'
+          ],
+          borderWidth: 1,
+          borderSkipped: false,
+          borderRadius: 5,
+          barPercentage: 0.5,
+          categoryPercentage: 0.9,
+        }]
+      },
+      options: {
+        indexAxis: 'y',
+        plugins: {
+          legend: {
+            display: false
+          },
+          title: {
+            display: true,
+            text: 'Number of Sold Lots as of {% now "SHORT_DATETIME_FORMAT" %}'
+          },
+          datalabels: {
+            anchor: 'end',
+            align: 'top',
+            formatter: Math.round,
+            font: {
+              weight: 'bold'
+            }
+          }
+        },
+        scales: {
+          x: {
+            grid: {
+              display: false,
+              drawBorder: false
+            },
+            ticks: {
+              display: true
+            }
+          },
+          y: {
+            beginAtZero: true,
+            grid: {
+              display: false,
+              drawBorder: false
+            },
+            ticks: {
+              display: true
+            }
+          }
+        }
+      },
+    });
+  </script>
+  <!-- ---------------------------------- x ---------------------------------- -->
+
+  <!-- ----------------------------- Month Chart ----------------------------- -->
+  <script>
+    Chart.register(ChartDataLabels);
+    const ctx3 = document.getElementById('soldLotsThisMonth');
+    new Chart(ctx3, {
+      type: 'bar',
+      data: {
+        labels: [{% for data in all_locations %}'{{data.grave_area}}',{% endfor %}],
+        datasets: [{
+          label: 'Lot Sold',
+          data: [{% for data in customers_current_month.all %}{{data.lot_chosen}},{% endfor %}],
+          borderColor: [
+            'rgba(255, 99, 132, 0.2)',
+            'rgba(54, 162, 235, 0.2)',
+            'rgba(255, 206, 86, 0.2)',
+            'rgba(75, 192, 192, 0.2)',
+            'rgba(153, 102, 255, 0.2)',
+            'rgba(255, 159, 64, 0.2)'
+          ],
+          backgroundColor: [
+            'rgba(255, 99, 132, 1)',
+            'rgba(54, 162, 235, 1)',
+            'rgba(255, 206, 86, 1)',
+            'rgba(75, 192, 192, 1)',
+            'rgba(153, 102, 255, 1)',
+            'rgba(255, 159, 64, 1)'
+          ],
+          borderWidth: 1,
+          borderSkipped: false,
+          borderRadius: 5,
+          barPercentage: 0.5,
+          categoryPercentage: 0.9,
+        }]
+      },
+      options: {
+        indexAxis: 'y',
+        plugins: {
+          legend: {
+            display: false
+          },
+          title: {
+            display: false,
+            // text: 'Number of Sold Lots as of {% now "F" %}'
+          },
+          datalabels: {
+            anchor: 'end',
+            align: 'top',
+            formatter: Math.round,
+            font: {
+              weight: 'bold'
+            }
+          }
+        },
+        scales: {
+          x: {
+            grid: {
+              display: false,
+              drawBorder: false
+            },
+            ticks: {
+              display: true
+            }
+          },
+          y: {
+            beginAtZero: true,
+            grid: {
+              display: false,
+              drawBorder: false
+            },
+            ticks: {
+              display: true
+            }
+          }
+        }
+      },
+    });
+  </script>
+  <!-- ---------------------------------- x ---------------------------------- -->
+
+  <!-- ----------------------------- Year Chart ----------------------------- -->
+  <script>
+    Chart.register(ChartDataLabels);
+    const ctx2 = document.getElementById('soldLotsThisYear');
+    new Chart(ctx2, {
+      type: 'bar',
+      data: {
+        labels: [{% for data in all_locations %}'{{data.grave_area}}',{% endfor %}],
+        datasets: [{
+          label: 'Lot Sold',
+          data: [{% for data in customers_current_year.all %}{{data.lot_chosen}},{% endfor %}],
+          borderColor: [
+            'rgba(255, 99, 132, 0.2)',
+            'rgba(54, 162, 235, 0.2)',
+            'rgba(255, 206, 86, 0.2)',
+            'rgba(75, 192, 192, 0.2)',
+            'rgba(153, 102, 255, 0.2)',
+            'rgba(255, 159, 64, 0.2)'
+          ],
+          backgroundColor: [
+            'rgba(255, 99, 132, 1)',
+            'rgba(54, 162, 235, 1)',
+            'rgba(255, 206, 86, 1)',
+            'rgba(75, 192, 192, 1)',
+            'rgba(153, 102, 255, 1)',
+            'rgba(255, 159, 64, 1)'
+          ],
+          borderWidth: 1,
+          borderSkipped: false,
+          borderRadius: 5,
+          barPercentage: 0.5,
+          categoryPercentage: 0.9,
+        }]
+      },
+      options: {
+        indexAxis: 'y',
+        plugins: {
+          legend: {
+            display: false
+          },
+          title: {
+            display: false,
+            text: 'Number of Sold Lots as of {% now "Y" %}'
+          },
+          datalabels: {
+            anchor: 'end',
+            align: 'top',
+            formatter: Math.round,
+            font: {
+              weight: 'bold'
+            }
+          }
+        },
+        scales: {
+          x: {
+            grid: {
+              display: false,
+              drawBorder: false
+            },
+            ticks: {
+              display: true
+            }
+          },
+          y: {
+            beginAtZero: true,
+            grid: {
+              display: false,
+              drawBorder: false
+            },
+            ticks: {
+              display: true
+            }
+          }
+        }
+      },
+    });
+  </script>
+  <!-- ---------------------------------- x ---------------------------------- -->
+
+  <!-- -------------------------------- Save State --------------------------------- -->
+  <script>
+    const pillsTab = document.querySelector('#pills-tab');
+    const pills = pillsTab.querySelectorAll('button[data-bs-toggle="pill"]');
+
+    pills.forEach(pill => {
+    pill.addEventListener('shown.bs.tab', (event) => {
+    const { target } = event;
+    const { id: targetId } = target;
+
+    savePillId(targetId);
+    });
+    });
+
+    const savePillId = (selector) => {
+    localStorage.setItem('activePillId', selector);
+    };
+
+    const getPillId = () => {
+    const activePillId = localStorage.getItem('activePillId');
+
+    // if local storage item is null, show default tab
+    if (!activePillId) return;
+
+    // call 'show' function
+    const someTabTriggerEl = document.querySelector(`#${activePillId}`)
+    const tab = new bootstrap.Tab(someTabTriggerEl);
+
+    tab.show();
+    };
+
+    // get pill id on load
+    getPillId();
+  </script>
+  <!-- ---------------------------------- x ---------------------------------- -->
+
+  <!-- ---------------------------- Year Dropdown ---------------------------- -->
+  <script>
+    var selectBox = document.getElementById('year');
+    var currentTime = new Date()
+    var year = currentTime.getFullYear()
+    // loop through years
+    for (var i = year; i >= 1900; i--) {
+      // create option element
+      var option = document.createElement('option');
+      // add value and text name
+      option.value = i;
+      option.innerHTML = i;
+      // add the option element to the selectbox
+      selectBox.appendChild(option);
+    }
+  </script>
+  <!-- ---------------------------------- x ---------------------------------- -->
+
+{% endblock %}

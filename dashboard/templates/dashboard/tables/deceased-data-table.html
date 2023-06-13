@@ -1,0 +1,105 @@
+<div class="row">
+    <div class="col-lg-12 grid-margin stretch-card">
+      <div class="card">
+        <div class="card-body border border-1 border-secondary">
+          <div class="controls ms-2 mb-4">
+            <div class="row">
+              <div class="col-12 d-flex gap-2 justify-content-start">
+                <span class="align-self-center fw-bold">Options:</span>
+                <button type="button" class="btn btn-primary btn-sm" id="add_data">Add Data</button>
+                <button type="button" class="btn btn-sm btn-primary ms-2" onclick="printJS({ printable: 'example', type: 'html', ignoreElements: ['exclude'], css: ['https://cdn.datatables.net/1.12.1/css/jquery.dataTables.min.css']})">Print Data</button>
+                {% if user.is_superuser %}
+                <button type="button" class="btn btn-primary btn-sm ms-2" data-bs-toggle="modal" data-bs-target="#exampleModal">Import Excel Data</button>
+                {% endif %}
+              </div>
+            </div>
+          </div>
+          <hr>
+          <div class="table-responsive">
+            <table id="example" class="table table-hover table-striped table-bordered">
+              <thead>
+                <tr>
+                  <th>ID</th>
+                  <th>Name</th>
+                  <th>Born</th>
+                  <th>Died</th>
+                  <th>Location</th>
+                  <th>Lot Number</th>
+                  <th id="exclude">Grave Image</th>
+                  <th id="exclude">Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for data in data %}
+                <tr>
+                  <td>{{ data.id }}</td>
+                  <td class="text-success fw-bold">{{ data.name }}</td>
+                  <td>{{ data.born }}</td>
+                  <td>{{ data.died }}</td>
+                  <td>{{ data.get_grave_area }}</td>
+                  <td>{{ data.get_grave_lot_id }}</td>
+                  <td id="exclude">
+                    <a href="{% url 'GraveImages' %}">
+                        {% if data.graveimage %}
+                        <button class="badge badge-success fw-bold">Goto Images</button>
+                        {% else %}
+                        <button class="badge badge-danger fw-bold">Goto Images</button>
+                        {% endif %}
+                    </a>
+                  </td>
+                  <td id="exclude">
+                    <div class="d-flex justify-content-evenly">
+                      <button type="button" class="update-deceased btn btn-outline-success btn-sm me-2" data-form-url="{% url 'Update' data.id %}">
+                        <i class="mdi mdi-square-edit-outline"></i>
+                      </button>
+                      {% if user.is_superuser %}
+                      <button type="button" class="delete-deceased btn btn-outline-danger btn-sm" data-form-url="{% url 'Delete' data.id %}">
+                          <i class="mdi mdi-trash-can-outline"></i>
+                      </button>
+                      {% endif %}
+                  </td>
+                </tr>
+                {% endfor %}
+              </tbody>
+              <tfooter>
+                <tr id="exclude">
+                  <th>ID</th>
+                  <th>Name</th>
+                  <th>Born</th>
+                  <th>Died</th>
+                  <th>Location</th>
+                  <th>Lot Number</th>
+                  <th>Grave Image</th>
+                  <th>Action</th>
+                </tr>
+              </tfooter>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+</div>
+
+<div class="modal fade" id="exampleModal" data-bs-backdrop="static" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="exampleModalLabel">Import Excel Data</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form method="POST" action="{% url 'ImportCSV' %}" enctype="multipart/form-data">
+          {% csrf_token %}
+          <div class="mb-3">
+            <!-- <label for="exampleFormControlInput1" class="form-label">Excel File</label> -->
+            <input type="file" class="form-control" id="exampleFormControlInput1" name="csv_file" required>
+          </div>
+          <div style="font-size: .9rem;" class="text-muted">Before uploading a file make sure the excel file table columns have the following headers: <strong class="text-danger">name, born, died, location</strong> in exact order</div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <button type="submit" class="btn btn-primary">Save changes</button>
+      </div>
+    </div>
+  </div>
+</div>

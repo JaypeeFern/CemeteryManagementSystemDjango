@@ -1,0 +1,73 @@
+<!-- Nav Bar -->
+{% if user.is_authenticated %}
+<div class="feature-nav-gradient-bg">
+  <div class="container-fluid border-bottom border-opacity-50  border-memorial px-4">
+      <nav class="navbar navbar-dark navbar-expand-lg navbar-collapse">
+          <div class="container-fluid">
+              <a class="navbar-brand fw-bolder display-6 text-white" href="{% url 'Home' %}">SMPI</a>
+              <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#feature-layout-nav"
+                  aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
+                  <span class="navbar-toggler-icon"></span>
+              </button>
+              {% if user.is_authenticated %}
+              <div class="collapse navbar-collapse" id="feature-layout-nav">
+                {% with request.resolver_match.url_name as url_name %}
+                  <ul class="navbar-nav mb-2 mb-lg-0 d-flex">
+                      <li class="nav-item me-auto">
+                          <a class="nav-link bi-search {% if url_name == 'Search' %}active{% endif %}" aria-current="page" href="{% url 'Search' %}"> Search</a>
+                      </li>
+                      <li class="nav-item me-auto">
+                          <a class="nav-link bi-geo-alt {% if url_name == 'Locator' or url_name == 'SearchResults' %}active{% endif %}" href="{% url 'Locator' %}"> Grave Locator</a>
+                      </li>
+                      <li class="nav-item me-auto">
+                          <a class="nav-link bi-border-all {% if url_name == 'Procurement' %}active{% endif %}" href="{% url 'Procurement' %}"> Lot Procurement</a>
+                      </li>
+                  </ul>
+                {% endwith %}
+              </div>
+              <ul class="navbar-nav d-none d-lg-flex">
+                  <li class="nav-item"> 
+                      <div class="dropdown-center">
+                          <button class="btn btn-close-white fw-bold dropdown-toggle text-nowrap text-capitalize" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                              Welcome, {{user.first_name}}
+                          </button>
+                          <ul class="dropdown-menu">
+                              <li><a class="dropdown-item" href="{% url 'Dashboard' %}">Dashboard</a></li>
+                              <!-- <li><a class="dropdown-item" href="{% url 'Admin' %}">Admin Panel</a></li> -->
+                              <li><hr class="dropdown-divider"></li>
+                              <!-- <li><a class="dropdown-item" href="">Development: None</a></li> -->
+                              <!-- <li><hr class="dropdown-divider"></li> -->
+                              <li class=""><a class="dropdown-item" href="{% url 'Logout' %}">Logout</a></li>
+                            </ul>
+                        </div>
+                  </li>
+              </ul>
+              {% else %}
+              <div class="collapse navbar-collapse" id="navbarText">
+                  <ul class="navbar-nav me-auto mb-2 mb-lg-0 d-flex">
+                      <li class="nav-item me-auto">
+                          <a class="nav-link bi bi-house-door-fill" aria-current="page" href=""> Home</a>
+                      </li>
+                      <li class="nav-item me-auto">
+                          <a class="nav-link bi bi-building" href=""> About</a>
+                      </li>
+                      <li class="nav-item me-auto">
+                          <a class="nav-link bi bi-person-lines-fill" href=""> About Us</a>
+                      </li>
+                  </ul>
+                  <ul class="navbar-nav d-flex ">
+                      <li class="nav-item me-auto"> 
+                          <button class="btn btn-success me-2 bi bi-box-arrow-in-right mb-2 mb-lg-0" data-bs-toggle="modal" data-bs-target="#loginForm">   Login    </button>
+                      </li>
+                      <li class="nav-item me-auto"> 
+                          <button class="btn btn-outline-success mt-2 mt-md-0 bi bi-pencil-square" data-bs-toggle="modal" data-bs-target="#registerForm"> Register</button>
+                      </li>
+
+                  </ul>
+              </div>
+              {% endif %}
+          </div>
+      </nav>
+  </div>
+</div>
+{% endif %}

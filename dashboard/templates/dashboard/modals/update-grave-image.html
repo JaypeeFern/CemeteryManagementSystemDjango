@@ -1,0 +1,23 @@
+{% load widget_tweaks %}
+<form method="POST" enctype="multipart/form-data">
+    {% csrf_token %}
+    <div class="modal-header">
+        <h3 class="modal-title">Update Grave Image ID: {{data.id}}</h3>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+    </div>
+    <div class="modal-body">
+        
+        <div class="form-floating mb-3">
+            {{ form.name }}
+            <label class="" for="">Grave Image of</label>
+        </div>
+        <hr class="py-0 my-2">
+        <div class="form-group mb-3">
+            <label class="" for="">Grave Image</label>
+            {{ form.graveimage }}
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button type="submit" class="btn btn-primary">Update</button>
+    </div>
+</form>

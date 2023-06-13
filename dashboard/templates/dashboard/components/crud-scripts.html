@@ -1,0 +1,380 @@
+{% with request.resolver_match.url_name as url_name %}
+
+<!-- ----------------------------------------------------------------------- -->
+<!-- ---------------------------- Deceased Data ---------------------------- -->
+<!-- ----------------------------------------------------------------------- -->
+
+{% if url_name == 'Dash_Search' %}
+
+<!-- Create Function -->
+<script type="text/javascript">
+    $(document).ready(function() {
+    
+        $("#add_data").modalForm({
+            formURL: "{% url 'Dash_Add' %}",
+            modalID: "#create-modal"
+        });
+    
+    });
+</script>
+  
+<!-- Update Function -->
+<script type="text/javascript">
+function updateDeceasedForm() {
+    $(".update-deceased").each(function () {
+    $(this).modalForm({
+        formURL: $(this).data("form-url"),
+        asyncUpdate: false,
+        asyncSettings: {
+        closeOnSubmit: true,
+        successMessage: '',
+        dataUrl: "update/",
+        dataElementId: "#example",
+        dataKey: "table",
+        addModalFormFunction: updateDeceasedForm
+        }
+    });
+    });
+}
+updateDeceasedForm();
+</script>
+  
+<!-- Delete Function -->
+<script>
+    $(".delete-deceased").each(function () {
+    $(this).modalForm({formURL: $(this).data("form-url"), isDeleteForm: true});
+    });
+</script>
+
+{% endif %}
+
+<!-- ---------------------------------- x ---------------------------------- -->
+
+<!-- ----------------------------------------------------------------------- -->
+<!--                               Grave Image                               -->
+<!-- ----------------------------------------------------------------------- -->
+
+{% if url_name == 'Dash_Search' or url_name == 'GraveImages' %}
+
+<!-- Update Function -->
+<script type="text/javascript">
+  function updateImageForm() {
+    $(".update-grave-image").each(function () {
+      $(this).modalForm({
+        formURL: $(this).data("form-url"),
+        asyncUpdate: false,
+        asyncSettings: {
+          closeOnSubmit: false,
+          successMessage: '',
+          dataUrl: "update/",
+          dataElementId: "#example",
+          dataKey: "table",
+          addModalFormFunction: updateImageForm
+        }
+      });
+    });
+  }
+  updateImageForm();
+</script>
+
+{% endif %}
+
+<!-- ---------------------------------- x ---------------------------------- -->
+
+<!-- ----------------------------------------------------------------------- -->
+<!--                                Locations                                -->
+<!-- ----------------------------------------------------------------------- -->
+
+{% if url_name == 'Locations' %}
+
+<!-- Create Function -->
+<script type="text/javascript">
+  $(document).ready(function() {
+  
+      $("#add_location").modalForm({
+          formURL: "{% url 'AddLocation' %}",
+          modalID: "#create-modal"
+      });
+  
+  });
+  </script>
+  
+<!-- Update Function -->
+<script type="text/javascript">
+  function updateLocationForm() {
+    $(".update-location").each(function () {
+      $(this).modalForm({
+        formURL: $(this).data("form-url"),
+        asyncUpdate: false,
+        asyncSettings: {
+          closeOnSubmit: true,
+          successMessage: '',
+          dataUrl: "update/",
+          dataElementId: "#example",
+          dataKey: "table",
+          addModalFormFunction: updateLocationForm
+        }
+      });
+    });
+  }
+  updateLocationForm();
+</script>
+
+<!-- Delete Function -->
+<script>
+  $(".delete-location").each(function () {
+  $(this).modalForm({formURL: $(this).data("form-url"), isDeleteForm: true});
+  });
+</script>
+
+{% endif %}
+
+<!-- ---------------------------------- x ---------------------------------- -->
+
+<!-- ----------------------------------------------------------------------- -->
+<!--                                Customers                                -->
+<!-- ----------------------------------------------------------------------- -->
+
+{% if url_name == 'Customer' %}
+
+<!-- Create Function -->
+<script type="text/javascript">
+$(document).ready(function() {
+
+    $("#add_customer").modalForm({
+        formURL: "{% url 'AddCustomer' %}",
+        modalID: "#create-modal"
+    });
+
+});
+</script>
+
+<!-- Update Function -->
+<script type="text/javascript">
+  function updateCustomerForm() {
+    $(".update-customer").each(function () {
+      $(this).modalForm({
+        formURL: $(this).data("form-url"),
+        asyncUpdate: false,
+        asyncSettings: {
+          closeOnSubmit: true,
+          successMessage: '',
+          dataUrl: "update/",
+          dataElementId: "#example",
+          dataKey: "table",
+          addModalFormFunction: updateCustomerForm
+        }
+      });
+    });
+  }
+  updateCustomerForm();
+</script>
+
+<!-- Delete Function -->
+<script>
+  $(".delete-customer").each(function () {
+  $(this).modalForm({formURL: $(this).data("form-url"), isDeleteForm: true});
+  });
+</script>
+
+{% endif %}
+
+<!-- ---------------------------------- x ---------------------------------- -->
+
+<!-- ----------------------------------------------------------------------- -->
+<!--                             Garden Details                              -->
+<!-- ----------------------------------------------------------------------- -->
+
+{% if url_name == 'GardenDetails' %}
+
+<!-- Create Function -->
+<script type="text/javascript">
+  $(document).ready(function() {
+  
+      $("#add_garden_detail").modalForm({
+          formURL: "{% url 'AddGarden' %}",
+          modalID: "#create-modal"
+      });
+  
+  });
+</script>
+
+<!-- Update Function -->
+<script type="text/javascript">
+  function editGardenDetails() {
+    $(".update-garden-detail").each(function () {
+      $(this).modalForm({
+        formURL: $(this).data("form-url"),
+        asyncUpdate: false,
+        asyncSettings: {
+          closeOnSubmit: true,
+          successMessage: '',
+          dataUrl: "update/",
+          dataElementId: "#example",
+          dataKey: "table",
+          addModalFormFunction: editGardenDetails
+        }
+      });
+    });
+  }
+  editGardenDetails();
+</script>
+
+<!-- Delete Function -->
+<script>
+  $(".delete-garden-detail").each(function () {
+  $(this).modalForm({formURL: $(this).data("form-url"), isDeleteForm: true});
+  });
+</script>
+
+{% endif %}
+
+<!-- ---------------------------------- x ---------------------------------- -->
+
+<!-- ----------------------------------------------------------------------- -->
+<!--                                Lot Types                                -->
+<!-- ----------------------------------------------------------------------- -->
+
+{% if url_name == 'LotTypes' %}
+
+<!-- Create Function -->
+<script type="text/javascript">
+$(document).ready(function() {
+
+    $("#add_lot_type").modalForm({
+        formURL: "{% url 'AddLotType' %}",
+        modalID: "#create-modal"
+    });
+
+});
+</script>
+
+<!-- Update Function -->
+<script type="text/javascript">
+function editLotType() {
+  $(".update-lot-type").each(function () {
+    $(this).modalForm({
+      formURL: $(this).data("form-url"),
+      asyncUpdate: false,
+      asyncSettings: {
+        closeOnSubmit: true,
+        successMessage: '',
+        dataUrl: "update/",
+        dataElementId: "#example",
+        dataKey: "table",
+        addModalFormFunction: editLotType
+      }
+    });
+  });
+}
+editLotType();
+</script>
+
+<!-- Delete Function -->
+<script>
+  $(".delete-lot-type").each(function () {
+  $(this).modalForm({formURL: $(this).data("form-url"), isDeleteForm: true});
+  });
+</script>
+
+{% endif %}
+
+<!-- ---------------------------------- x ---------------------------------- -->
+
+<!-- ----------------------- System Accounts: Users ------------------------ -->
+
+{% if url_name == 'SystemUsers' %}
+
+<!-- Create Function -->
+<script type="text/javascript">
+  $(document).ready(function() {
+  
+      $("#add_user").modalForm({
+          formURL: "{% url 'AddUser' %}",
+          modalID: "#create-modal"
+      });
+  
+  });
+  </script>
+  
+  <!-- Update Function -->
+  <script type="text/javascript">
+  function editStaff() {
+    $(".update-user").each(function () {
+      $(this).modalForm({
+        formURL: $(this).data("form-url"),
+        asyncUpdate: false,
+        asyncSettings: {
+          closeOnSubmit: true,
+          successMessage: '',
+          dataUrl: "update/",
+          dataElementId: "#example",
+          dataKey: "table",
+          addModalFormFunction: editStaff
+        }
+      });
+    });
+  }
+  editStaff();
+  </script>
+  
+  <!-- Delete Function -->
+  <script>
+    $(".delete-user").each(function () {
+    $(this).modalForm({formURL: $(this).data("form-url"), isDeleteForm: true});
+    });
+  </script>
+
+  {% endif %}
+
+<!-- ---------------------------------- x ---------------------------------- -->
+
+<!-- ----------------------- System Accounts: Staff ------------------------ -->
+
+{% if url_name == 'SystemStaff' %}
+
+<!-- Create Function -->
+<script type="text/javascript">
+  $(document).ready(function() {
+  
+      $("#add_staff").modalForm({
+          formURL: "{% url 'AddStaff' %}",
+          modalID: "#create-modal"
+      });
+  
+  });
+  </script>
+  
+  <!-- Update Function -->
+  <script type="text/javascript">
+  function editStaff() {
+    $(".update-staff").each(function () {
+      $(this).modalForm({
+        formURL: $(this).data("form-url"),
+        asyncUpdate: false,
+        asyncSettings: {
+          closeOnSubmit: true,
+          successMessage: '',
+          dataUrl: "update/",
+          dataElementId: "#example",
+          dataKey: "table",
+          addModalFormFunction: editStaff
+        }
+      });
+    });
+  }
+  editStaff();
+  </script>
+  
+  <!-- Delete Function -->
+  <script>
+    $(".delete-staff").each(function () {
+    $(this).modalForm({formURL: $(this).data("form-url"), isDeleteForm: true});
+    });
+  </script>
+
+  {% endif %}
+
+<!-- ---------------------------------- x ---------------------------------- -->
+
+{% endwith %}

@@ -1,0 +1,97 @@
+{% load static %}
+<nav class="sidebar sidebar-offcanvas" id="sidebar">
+    <ul class="nav">
+      <li class="nav-item sidebar-category">
+        <p>Home</p>
+        <span></span>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="{% url 'Dashboard' %}">
+          <i class="mdi mdi-home menu-icon"></i>
+          <span class="menu-title">Dashboard</span>
+          <!-- <div class="badge badge-info badge-pill">2</div> -->
+        </a>
+      </li>
+      <li class="nav-item d-block d-md-none">
+        <a href="{% url 'Home' %}" class="nav-link icon-link">
+          <i class="mdi mdi-keyboard-return menu-icon"></i>
+          <span class="menu-title">Goto Website</span>
+        </a>
+      </li>
+      {% if user.is_superuser %}
+      <li class="nav-item">
+        <a href="{% url 'Admin' %}" class="nav-link icon-link">
+          <i class="mdi mdi-keyboard-return menu-icon"></i>
+          <span class="menu-title">Admin Dashboard</span>
+        </a>
+      </li>
+      {% endif %}
+      <li class="nav-item sidebar-category">
+        <p>Deceased Information</p>
+        <span></span>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="{% url 'Dash_Search' %}">
+          <i class="mdi mdi-database menu-icon"></i>
+          <span class="menu-title">Deceased Data</span>
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="{% url 'GraveImages' %}">
+          <i class="mdi mdi-image-album menu-icon"></i>
+          <span class="menu-title">Grave Images</span>
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="{% url 'Locations' %}">
+          <i class="mdi mdi-map-marker menu-icon"></i>
+          <span class="menu-title">Locations</span>
+        </a>
+      </li>
+      <li class="nav-item sidebar-category">
+        <p>Lot Procurement</p>
+        <span></span>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="{% url 'Customer' %}">
+          <i class="mdi mdi-human-male menu-icon"></i>
+          <span class="menu-title">Customers</span>
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="{% url 'GardenDetails' %}">
+          <i class="mdi mdi-book-open menu-icon"></i>
+          <span class="menu-title">Garden Details</span>
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="{% url 'GardenImages' %}">
+          <i class="mdi mdi-image-album menu-icon"></i>
+          <span class="menu-title">Garden Images</span>
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="{% url 'LotTypes' %}">
+          <i class="mdi mdi-crop-landscape menu-icon"></i>
+          <span class="menu-title">Lot Types</span>
+        </a>
+      </li>
+      <li class="nav-item sidebar-category">
+        <p>Other</p>
+        <span></span>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" data-bs-toggle="collapse" href="#sys_accounts" aria-expanded="false" aria-controls="ui-basic">
+          <i class="mdi mdi-account-box-multiple menu-icon"></i>
+          <span class="menu-title">System Accounts</span>
+          <i class="menu-arrow"></i>
+        </a>
+        <div class="collapse" id="sys_accounts">
+          <ul class="nav flex-column sub-menu">
+            <li class="nav-item"> <a class="nav-link" href="{% url 'SystemUsers' %}">Users</a></li>
+            <li class="nav-item"> <a class="nav-link" href="{% url 'SystemStaff' %}">Staff</a></li>
+          </ul>
+        </div>
+      </li>
+    </ul>
+  </nav>

@@ -1,0 +1,186 @@
+<div class="container-fluid mt-3 mb-2 pb-3 ">
+    <div class="card bg-light">
+      <div class="card-header bg-memorial border-0">
+        <p class="text-uppercase text-white fw-bold mt-2 border-bottom">Grave Locator</p>
+        {% if data %}
+        {% for data in data %}
+        <p class="text-justify text-capitalize text-white fw-light text-m">Grave Information for <b>{{ data.name }}</b>, Located at <b>{{ data.location }}</b>, Lot Number <b>{{ data.get_grave_lot_id }}</b>.</p>
+        {% endfor %}
+        {% else %}
+        <p class="text-justify text-capitalize text-white fw-light text-m">Headstone Image, GPS Location, and Personal Data were added by cemetery personel of Surigao Memorial Park Inc.</p>
+        {% endif %}
+      </div>
+      <div class="card-body bg-lot12 border border-memorial border-1 border-opacity-50"s>
+  
+      <!-- SEARCH START -->
+      <div class="container-fluid">
+        <form method="POST" action="{% url 'Locator' %}">
+          {% csrf_token %}
+          <div class="form-floating mb-3">
+            <input class="form-control text-uppercase " name="q" type="search" placeholder="#" aria-label="Search" aria-describedby="searchHead">
+            <label for="q">Enter Full Name</label>
+            <div id="searchHead" class="form-text mb-3">Input will only accept the EXACT NAME of the deceased. Example: JUAN DELA CRUZ not JUAN or CRUZ or JUAN DELA</div>
+          </div>
+        </form>
+      </div>
+      <!-- SEARCH END -->
+  
+      <!-- DATA START -->
+      
+      <div class="container-fluid">
+        <div class="row">
+          {% for data in data %}
+          <div class="col-xl-4 col-md-6 col-sm-6">
+            <ul class="list-unstyled me-auto mt-3 fw-bold">
+                <div class="p-1">Name:<hr></div>
+                <div class="p-1">Born Date:<hr></div>
+                <div class="p-1">Death Date:<hr></div>
+                <div class="p-1">Location:<hr></div>
+                <div class="p-1">Lot Number:<hr></div>
+            </ul>
+        </div>
+        <div class="col-xl-4 col-md-6 col-sm-6">
+            <ul class="list-unstyled me-auto mt-3 fw-bold">
+                <div class="p-1">{{ data.name }}<hr></div>
+                <div class="p-1">{{ data.born }}<hr></div>
+                <div class="p-1">{{ data.died }}<hr></div>
+                <div class="p-1">{{ data.get_grave_area }}<hr></div>
+                <div class="p-1">{{ data.get_grave_lot_id }}<hr></div>
+            </ul>
+        </div>
+        <div class="col-xl-4 col-md-12">
+          {% if data.graveimage %}
+          <div class="p-2 mb-md-4">
+              <img class="img-fluid img-responsive d-sm-block w-auto m-auto" style="border-radius: 1rem;" src="{{data.graveimage.url}}" alt="Headstone Image Not Available.">
+              <button type="button" class="btn btn-outline-success mt-4 d-block m-auto col-6" data-bs-toggle="modal" data-bs-target="#map-Modal" >Open Map</button>
+          </div>
+          {% else %}
+          <div class="p-2">
+              <img class="img-fluid img-responsive d-sm-block w-50" style="border-radius: 1rem;" src="#" alt="Headstone Image Not Available.">
+              <button type="button" class="btn btn-outline-success mt-4 d-block m-auto col-6" data-bs-toggle="modal" data-bs-target="#map-Modal" >Open Map</button>
+          </div>
+          {% endif %}
+      </div>
+          {% endfor %}
+        </div>
+      </div>
+     
+      <!-- DATA END -->
+  
+      <!-- Map Modal -->
+      {% include "locator/show-map.html" %}
+      </div>
+    </div>
+  </div>
+  <!-- Grave Locator Body End -->
+
+
+
+
+
+
+
+
+
+  <!-- New  -->
+
+  <section class="bg-lot12 m-0 p-0" style="min-height: 100vh;">
+    <div class="container-fluid m-0 p-0">
+      <div class="row"  style="min-height: 100vh;">
+        <div class="col-12">
+            <div class="container pt-4">
+                <form method="POST" action="{% url 'Locator' %}">
+                    {% csrf_token %}
+                    <div class="form-floating mb-3">
+                        <input class="form-control text-uppercase" name="q" type="search" placeholder="#" aria-label="Search" aria-describedby="searchHead">
+                        <label for="q">Enter Full Name</label>
+                        <div id="searchHead" class="form-text mb-3">Input will only accept the EXACT NAME of the deceased. Example: JUAN DELA CRUZ not JUAN or CRUZ or JUAN DELA</div>
+                    </div>
+                </form>
+                <hr>
+            </div>
+        </div>
+        <div class="col-12">
+          <div class="container">
+            <div class="row">
+              {% for data in data %}
+              <div class="col-6">
+                <div class="display-4 mb-4 fw-bold text-memorial">
+                  {{data.name|title}}
+                </div>
+                <div class="row g-4 fs-6">
+                  <div class="col-4 fw-bold text-memorial">BIRTH</div>
+                  <div class="col-8">{{data.born}}</div>
+                  <hr>
+                  <div class="col-4 fw-bold text-memorial">DEATH</div>
+                  <div class="col-8">{{data.died}}</div>
+                  <hr>
+                  <div class="col-4 fw-bold text-memorial">LOCATION</div>
+                  <div class="col-8">{{data.get_grave_area}}</div>
+                  <hr>
+                </div>
+              </div>
+              <div class="col-6">
+                {% if data.graveimage %}
+                <div class="p-2 mb-md-4">
+                    <img class="img-fluid img-responsive d-sm-block w-auto m-auto" style="border-radius: 1rem;" src="{{data.graveimage.url}}" alt="Headstone Image Not Available.">
+                    <button type="button" class="btn btn-outline-success mt-4 d-block m-auto col-6" data-bs-toggle="modal" data-bs-target="#map-Modal" >Open Map</button>
+                </div>
+                {% else %}
+                <div class="p-2">
+                    <img class="img-fluid img-responsive d-sm-block w-50" style="border-radius: 1rem;" src="#" alt="Headstone Image Not Available.">
+                    <button type="button" class="btn btn-outline-success mt-4 d-block m-auto col-6" data-bs-toggle="modal" data-bs-target="#map-Modal" >Open Map</button>
+                </div>
+                {% endif %}
+              </div>
+              {% endfor %}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  {% for data in results %}
+  <div class="container">
+    <div class="row">
+      <div class="col-1 {% if data.graveimage == '' %}bg-secondary opacity-25{% endif %}">
+          {% if data.graveimage %}
+          <img class="" src="{{data.graveimage.url}}" width="80px" height="60px" style="border-radius: 5px;">
+          {% endif %}
+      </div>
+      <div class="col-9">
+        <div class="row mb-5 fs-6">
+          <div class="col-12 text-memorial">
+            <a class="text-decoration-none text-memorial fw-bold" href="#">
+              {{data.name}}
+            </a>
+          </div>
+          <div class="col-12 text-muted small">
+            {{data.born}} - {{data.died}}
+          </div>
+        </div>
+      </div>
+      <div class="col-2 text-muted">
+        Description
+      </div>
+    </div>
+  </div>
+  {% endfor %}

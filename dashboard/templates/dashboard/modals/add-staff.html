@@ -1,0 +1,42 @@
+{% load widget_tweaks %}
+<form method="POST" enctype="multipart/form-data">
+    {% csrf_token %}
+    <div class="modal-header">
+        <h3 class="modal-title">Add New Staff/Admin Account</h3>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+    </div>
+    <div class="modal-body">
+        
+        <div class="form-floating mb-3">
+            {{ form.first_name }}
+            <label class="" for="">Full Name</label>
+        </div>
+        <div class="form-floating mb-3">
+            {{ form.username }}
+            <label class="" for="">Username</label>
+        </div>
+        <div class="form-floating mb-3">
+            {{ form.password1 }}
+            <label class="" for="">Password</label>
+        </div>
+        <div class="form-floating mb-3">
+            {{ form.password2 }}
+            <label class="" for="">Confirm Password</label>
+        </div>
+        <div class="form-row field-is_active">
+            <label class="mb-3">Account Type:</label><br>
+            <div class="checkbox-row mb-3">
+                <input type="checkbox" name="is_staff" id="id_is_staff"> Staff
+                <div style="font-size: .9rem;" class="text-muted">Designates whether this user should be treated as staff.</div>
+            </div>
+            <div class="checkbox-row mb-3">
+                <input type="checkbox" name="is_superuser" id="id_is_superuser"> Admin
+                <div style="font-size: .9rem;" class="text-muted">Designates whether this user should be treated as an administrator.</div>
+            </div>
+        </div>
+
+    </div>
+    <div class="modal-footer">
+        <button type="submit" class="btn btn-primary">Save</button>
+    </div>
+</form>

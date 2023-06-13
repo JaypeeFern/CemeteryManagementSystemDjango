@@ -1,0 +1,40 @@
+                                                                      <!-- d-flex d-sm-flex d-lg-none -->
+                                                                      <div class="mobile d-none">
+                                                                      {% include "procurement/reservation-form-mobile.html" %}
+                                                                      </div>
+
+                                                                      <!-- d-none d-sm-none d-lg-block -->
+                                                                      <div class="desktop d-none">
+                                                                      {% include "procurement/reservation-form-desktop.html" %}
+                                                                      </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                                                      <div class="row p-2">
+                                                                        {% for data in data4 %}
+                                                                        <div class="col-12 mb-4 d-flex">
+                                                                            <span class="text-muted">ID: </span>
+                                                                            <span class="fs-6 fw-bold text-memorial flex-fill">{{data.reference_number}}</span>
+                                                                            <span class="text-muted small">Current User: {{request.user.first_name}} {{request.user.last_name}}</span>
+                                                                        </div>
+                                                                        <div class="col-12 text-center mb-3">Test</div>
+                                                                        {% endfor %}
+                                                                      </div>

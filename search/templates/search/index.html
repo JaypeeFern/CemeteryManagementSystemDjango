@@ -1,0 +1,63 @@
+{% extends "home/feature-layout.html" %}
+{% block body %}
+{% if user.is_authenticated %}
+
+<!-- Deceased Search Body -->
+  <div class="container-fluid mt-3 mb-2 pb-3 ">
+    <div class="card bg-light">
+      <div class="card-header bg-memorial border-0">
+        <p class="text-uppercase text-white fw-bold mt-2 border-bottom">Deceased Information</p>
+        <p class="text-justify text-white">Search information about your loved ones through the table below. Automatic search as you type and filter capabilities based on input are enabled that will provide you with accurate and smooth searching experience.</p>
+      </div>
+      <div class="card-body table-gradient border border-memorial border-1 border-opacity-50">
+
+        <div class="animate__animated animate__fadeInUp" id="search-table-box">
+          <table id="search-table" class="display table-responsive-lg table-responsive-sm nowrap cell-border" width="100%">
+            <thead>
+              <tr class="text-uppercase">
+                <th>Name</th>
+                <th>Birth</th>
+                <th>Death</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for data in data %}
+              <tr>
+                <th><em>
+                  <form method="POST" id="search" action="{% url 'Locator' %}">
+                    {% csrf_token %}
+                    <button class="bg-transparent border-0 link-memorial fw-bold" onclick="document.getElementById('search').submit();">
+                      {{ data.name|title }}
+                      <input type="hidden" name="a" value="{{data.id}}">
+                    </button>
+                  </form>
+                </em></th>
+                <td>{{ data.born }}</td>
+                <td>{{ data.died }}</td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+
+      </div>
+    </div>
+  </div>
+<!-- Deceased Search Body End -->
+
+<!-- Access Denied -->
+{% else %}
+{% include 'home/access-denied.html' %}
+{% endif %}
+<!-- End -->
+
+<script>
+  $('#search-table').DataTable({
+    responsive: true,
+    "lengthMenu": [15, 30, 50, 75, 100],
+    language: {
+        searchPlaceholder: "First name or Last name",
+    }
+  });
+</script>
+{% endblock %}

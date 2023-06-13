@@ -1,0 +1,20 @@
+.box::before{
+    content:"";
+	position:fixed;
+	left:0;
+	top: 0;
+	right:0;
+	bottom:0;
+	z-index: -1;
+	background: linear-gradient(to bottom, #2bb398, #1eb894, #14bd8e, #13c287, #1bc67e, #21c779, #27c874, #2dc96e, #2dc76d, #2ec56c, #2ec46b, #2ec26a);
+}
+
+.dataTables_wrapper{
+	background-color: white !important; 
+	border-radius: .5rem;
+	padding-left: 1.6rem;
+	padding-right: 1.6rem;
+	padding-top: .5rem;
+	padding-bottom: 1rem;
+}
+

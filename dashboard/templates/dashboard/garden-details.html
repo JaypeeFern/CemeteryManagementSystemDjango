@@ -1,0 +1,121 @@
+{% extends "dashboard/layout.html" %}
+{% block body %}
+{% load static %}
+
+<div class="container-scroller d-flex">
+    <!-- partial:./partials/_sidebar.html -->
+    {% include 'dashboard/components/sidebar.html' %}
+    <!-- partial -->
+    <div class="container-fluid page-body-wrapper">
+      <!-- partial:./partials/_navbar.html -->
+    {% include 'dashboard/components/topnav.html' %}
+      <!-- partial -->
+      <div class="main-panel">
+        <div class="content-wrapper">
+            <div class="row">
+                <div class="col-lg-12 grid-margin stretch-card">
+                  <div class="card border-1 border-secondary">
+                    <div class="card-body">
+                      <div class="controls ms-2 mb-4">
+                        <div class="row">
+                            <div class="col-12 d-flex gap-2 justify-content-start">
+                                <span class="align-self-center fw-bold">Options:</span>
+                                <button type="button" class="btn btn-primary btn-sm" id="add_garden_detail">Add Garden Detail</button>
+                            </div>
+                        </div>
+                      </div>
+                      <hr>
+                      <div class="table-responsive">
+                        <table id="example" class="table table-hover table-striped table-bordered">
+                          <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Lot Image</th>
+                                <th>Lot/Location Name</th>
+                                <th>Lot Types</th>
+                                <th>Last Submission</th>
+                                <Th>Action</Th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            {% for data in data %}
+                            <tr>
+                              <td>{{ data.id }}</td>
+                              <td>
+                                <a href="{% url 'GardenImages' %}">
+                                  {% if data.Lot_Image %}
+                                  <button class="badge badge-success fw-bold fs-6">Goto Images</button>
+                                  {% else %}
+                                  <button class="badge badge-danger fw-bold fs-6">Goto Images</button>
+                                  {% endif %}
+                                </a>
+                              </td>
+                              <td>
+                                <span class="fs-5 mb-6 fw-bold text-success">{{ data.Garden_Name }}</span>
+                                <hr class="my-2 py-0">
+                                <span class="fw-bold" style="font-size: 0.8rem;">Description: {{ data.Garden_Description }}</span>
+                                <hr class="my-2 py-0">
+                                <span class="fw-bold" style="font-size: 0.8rem;">Available Space: {{ data.Available_Space }}</span>
+                              </td>
+                              <td>
+                                <ul class="card-text list-unstyled">
+                                    {% for data in data.Lot_Type.all %}
+                                    <li><strong>{{ data }}</strong></li>
+                                    {% endfor %}
+                                </ul>
+                              </td>
+                              <td>{{ data.Date_Modified }}</td>
+                              <td>
+                                <button type="button" class="update-garden-detail btn btn-outline-success btn-sm me-1" data-form-url="{% url 'UpdateGarden' data.id %}">
+                                  <i class="mdi mdi-square-edit-outline"></i>
+                                </button>
+                                {% if user.is_superuser %}
+                                <button type="button" class="delete-garden-detail btn btn-outline-danger btn-sm" data-form-url="{% url 'DeleteGarden' data.id %}">
+                                  <i class="mdi mdi-trash-can-outline"></i>
+                                </button>
+                                {% endif %}
+                              </td>
+                            </tr>
+                            {% endfor %}
+                          </tbody>
+                        </table>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+        </div>
+        <!-- content-wrapper ends -->
+        <!-- partial:./partials/_footer.html -->
+      {% include 'dashboard/components/footer.html' %}
+        <!-- partial -->
+      </div>
+      <!-- main-panel ends -->
+    </div>
+    <!-- page-body-wrapper ends -->
+  </div>
+  <!-- container-scroller -->
+
+  <!-- Create Modal -->
+  {% include 'dashboard/modals/layout-create-modal.html' %}
+
+  <!-- Update Modal -->
+  {% include 'dashboard/modals/layout-update-modal.html' %}
+
+  <!-- CRUD Functions -->
+  {% include 'dashboard/components/crud-scripts.html' %}
+
+<script>
+    $(document).ready(function () {
+    $('#example').DataTable({
+        "lengthMenu": [15, 30, 50, 75, 100],
+        "bStateSave": true,
+        'columnDefs': [
+            {'width': '25%', 'targets': 2},
+            {'width': '18%', 'targets': 4}
+        ]
+    });
+    });
+</script>
+{% endblock %}
+

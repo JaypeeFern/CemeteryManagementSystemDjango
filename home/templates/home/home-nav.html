@@ -1,0 +1,182 @@
+<!-- Top Bar -->
+<div class="top-bar bg-memorial d-none d-md-flex">
+    <div class="container-fluid px-0 py-1 my-1 mx-5">
+        <div class="row">
+            <div class="col-12 col-md-6">
+                <div class="d-flex align-items-center justify-content-center justify-content-md-start text-white lead fs-6">
+                    <i class="bi bi-envelope d-flex align-items-center">
+                        <span class="ms-2">+63 86 826 8882</span>
+                    </i>
+                    <i class="bi bi-phone d-flex align-items-center ms-4">
+                        <span class="ms-2">smpi87@yahoo.com</span>
+                    </i>
+                </div>
+            </div>
+            <div class="col-12 col-md-6">
+                <div class="d-flex justify-content-center justify-content-md-end align-items-center mt-2 mt-md-0">
+                    <div class="row">
+                        <div class="col">
+                            <a href="#" class="text-decoration-none link-light"><i class="bi bi-twitter"></i></a>
+                        </div>
+                        <div class="col">
+                            <a href="#" class="text-decoration-none link-light"><i class="bi bi-facebook"></i></a>
+                        </div>
+                        <div class="col">
+                            <a href="#" class="text-decoration-none link-light"><i class="bi bi-instagram"></i></a>
+                        </div>
+                        <div class="col">
+                            <a href="#" class="text-decoration-none link-light"><i class="bi bi-linkedin"></i></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Nav Bar -->
+<nav class="navbar navbar-expand-lg bg-light sticky-top home-nav-gradient d-flex d-md-flex d-lg-none d-xxl-none">
+    <div class="container">
+      <a class="navbar-brand fw-bolder display-6 text-memorial" href="{% url 'Home' %}">SMPI</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar" aria-controls="offcanvasNavbar">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasNavbar" aria-labelledby="offcanvasNavbarLabel">
+        {% if user.is_authenticated  %}
+        <div class="offcanvas-header">
+          <h5 class="offcanvas-title text-memorial" id="offcanvasNavbarLabel">Welcome, {{user.first_name}}!</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+        </div>
+        {% else %}
+        <div class="offcanvas-header">
+            <h5 class="offcanvas-title text-memorial" id="offcanvasNavbarLabel">Surigao Memorial Park</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+          </div>
+        {% endif %}
+        <div class="offcanvas-body" id="navbarText">
+          <ul class="navbar-nav justify-content-start flex-grow-1 pe-3">
+            {% if user.is_authenticated  %}
+            <li class="nav-item">
+                <a class="nav-link mdi mdi-magnify mdi-24px fs-5" aria-current="page" href="{% url 'Search' %}"> Search</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link mdi mdi-map-marker mdi-24px fs-5" href="{% url 'Locator' %}"> Grave Locator</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link mdi mdi-border-all mdi-24px fs-5" href="{% url 'Procurement' %}"> Lot Procurement</a>
+            </li>
+            {% if user.is_staff or user.is_superuser %}
+            <li class="nav-item">
+                <hr class="border-memorial border border-2 m-0 my-2 p-0">
+            </li>
+            <li class="nav-item">
+                <a class="nav-link mdi mdi-view-dashboard mdi-24px fs-5" href="{% url 'Dashboard' %}"> Dashboard</a>
+            </li>
+            <!-- <li class="nav-item">
+                <a class="nav-link mdi mdi-account mdi-24px fs-5" href="{% url 'Admin' %}"> Admin Panel</a>
+            </li> -->
+            {% endif %}
+            <li class="nav-item">
+                <hr class="border-memorial border border-2 m-0 my-2 p-0">
+            </li>
+            <li class="nav-item">
+                <a class="nav-link mdi mdi-logout mdi-24px fs-5" href="{% url 'Logout' %}"> Logout</a>
+            </li>
+            {% else %}
+            <li class="nav-item">
+                <a class="nav-link mdi mdi-magnify mdi-24px fs-5" aria-current="page" href=""> Home</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link mdi mdi-book mdi-24px fs-5" href=""> About Us</a>
+            </li>
+            <li class="nav-item">
+                <hr class="border-memorial border border-2 m-0 my-2 p-0">
+            </li>
+            <li class="nav-item">
+                <a class="nav-link mdi mdi-login mdi-24px fs-5" data-bs-toggle="modal" data-bs-target="#loginForm"> Login</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link mdi mdi-logout mdi-24px fs-5" data-bs-toggle="modal" data-bs-target="#registerForm"> Register</a>
+            </li>
+            {% endif %}
+          </ul>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- ------------------------------- PC Nav -------------------------------- -->
+
+  <div class="home-nav-gradient sticky-md-top d-none d-lg-flex">
+    <div class="container px-4 py-1">
+        <nav class="navbar navbar-expand-lg navbar-collapse">
+            <div class="container-fluid">
+                <a class="navbar-brand fw-bolder display-6 text-memorial" href="{% url 'Home' %}">SMPI</a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarText"
+                    aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                {% if user.is_authenticated %}
+                <div class="collapse navbar-collapse" id="navbarText">
+                    <ul class="navbar-nav mb-2 mb-lg-0 d-flex">
+                        <li class="nav-item me-auto">
+                            <a class="nav-link bi-search" aria-current="page" href="{% url 'Search' %}"> Search</a>
+                        </li>
+                        <li class="nav-item me-auto">
+                            <a class="nav-link bi-geo-alt" href="{% url 'Locator' %}"> Grave Locator</a>
+                        </li>
+                        <li class="nav-item me-auto">
+                            <a class="nav-link bi-border-all" href="{% url 'Procurement' %}"> Lot Procurement</a>
+                        </li>
+                    </ul>
+                </div>
+                <ul class="navbar-nav d-none d-lg-flex">
+                    <li class="nav-item"> 
+                        <div class="dropdown-center">
+                            <button class="btn btn-success dropdown-toggle text-nowrap text-capitalize" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                Welcome, {{user.first_name}}
+                            </button>
+                            <ul class="dropdown-menu">
+                                {% if user.is_staff or user.is_superuser %}
+                                <li><a class="dropdown-item" href="{% url 'Dashboard' %}">Dashboard</a></li>
+                                <!-- <li><a class="dropdown-item" href="{% url 'Admin' %}">Admin Panel</a></li> -->
+                                <li><hr class="dropdown-divider"></li>
+                                <!-- <li><a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#exampleModal">Development: None</a></li> -->
+                                <!-- <li><hr class="dropdown-divider"></li> -->
+                                <li class=""><a class="dropdown-item" href="{% url 'Logout' %}">Logout</a></li>
+                                {% else %}
+                                <li class=""><a class="dropdown-item" href="{% url 'Logout' %}">Logout</a></li>
+                                {% endif %}
+                              </ul>
+                          </div>
+                    </li>
+                </ul>
+                {% else %}
+                <div class="collapse navbar-collapse" id="navbarText">
+                    <ul class="navbar-nav me-auto mb-2 mb-lg-0 d-flex">
+                        <li class="nav-item me-auto">
+                            <a class="nav-link mdi mdi-home" aria-current="page" href=""> Home</a>
+                        </li>
+                        <!-- <li class="nav-item me-auto">
+                            <a class="nav-link bi bi-building" href=""> About</a>
+                        </li> -->
+                        <li class="nav-item me-auto">
+                            <a class="nav-link mdi mdi-book" href=""> About Us</a>
+                        </li>
+                    </ul>
+                    <ul class="navbar-nav d-flex ">
+                        <li class="nav-item me-auto"> 
+                            <button class="btn btn-success me-2 mdi mdi-login mb-2 mb-lg-0" data-bs-toggle="modal" data-bs-target="#loginForm">   Login    </button>
+                        </li>
+                        <li class="nav-item me-auto"> 
+                            <button class="btn btn-outline-success mt-2 mt-md-0 mdi mdi-pencil-box-outline" data-bs-toggle="modal" data-bs-target="#registerForm"> Register</button>
+                        </li>
+
+                    </ul>
+                </div>
+                {% endif %}
+            </div>
+        </nav>
+    </div>
+</div>
+  

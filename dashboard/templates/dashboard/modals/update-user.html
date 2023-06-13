@@ -1,0 +1,35 @@
+{% load widget_tweaks %}
+<form method="POST" enctype="multipart/form-data">
+    {% csrf_token %}
+    <div class="modal-header">
+        <h3 class="modal-title">Update Account ID: {{data.id}}</h3>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+    </div>
+    <div class="modal-body">
+        
+        <div class="form-floating mb-3">
+            {{ form.username }}
+            <label class="" for="">Username</label>
+        </div>
+        <div class="form-floating mb-3">
+            {{ form.first_name }}
+            <label class="" for="">Full Name</label>
+        </div>
+        <div class="form-group mb-3">
+            <label for="">Password</label>
+            <input type="password" name="new_password" class="form-control">
+            <div class="form-text">Leave this blank if you dont want to change the password.</div>
+        </div>
+        <div class="form-row field-is_active">
+            <div class="checkbox-row">
+                <label class="mb-3">Account Status:</label><br>
+                {{ form.is_active }} Active
+                <div style="font-size: .9rem;" class="text-muted">Designates whether this user should be treated as active.</div>
+            </div>
+        </div>
+        
+    </div>
+    <div class="modal-footer">
+        <button type="submit" class="btn btn-primary">Update</button>
+    </div>
+</form>

@@ -1,0 +1,58 @@
+{% extends "dashboard/layout.html" %}
+{% block body %}
+{% load static %}
+
+<div class="container-scroller d-flex">
+    <!-- partial:./partials/_sidebar.html -->
+    {% include 'dashboard/components/sidebar.html' %}
+    <!-- partial -->
+    <div class="container-fluid page-body-wrapper">
+      <!-- partial:./partials/_navbar.html -->
+    {% include 'dashboard/components/topnav.html' %}
+      <!-- partial -->
+      <div class="main-panel">
+        <div class="content-wrapper">
+          {% include 'dashboard/tables/deceased-data-table.html' %}
+        </div>
+        <!-- content-wrapper ends -->
+        <!-- partial:./partials/_footer.html -->
+      {% include 'dashboard/components/footer.html' %}
+        <!-- partial -->
+      </div>
+      <!-- main-panel ends -->
+    </div>
+    <!-- page-body-wrapper ends -->
+  </div>
+  <!-- container-scroller -->
+
+  <!-- Create Modal -->
+  {% include 'dashboard/modals/layout-create-modal.html' %}
+
+  <!-- Update Modal -->
+  {% include 'dashboard/modals/layout-update-modal.html' %}
+
+  <!-- CRUD Functions -->
+  {% include 'dashboard/components/crud-scripts.html' %}
+
+  {{test}}
+
+<script>
+    $(document).ready(function () {
+    $('#example').DataTable({
+        "lengthMenu": [15, 30, 50, 75, 100],
+        "bStateSave": true,
+        'columnDefs': [
+            {'width': '0%', 'targets': 0},
+            {'width': '1%', 'targets': 1},
+            {'width': '2%', 'targets': 2},
+            {'width': '2%', 'targets': 3},
+            {'width': '5%', 'targets': 4},
+            {'width': '3%', 'targets': 5},
+            {'width': '1%', 'targets': 6},
+            {'width': '1%', 'targets': 7},
+        ],
+    });
+    });
+</script>
+{% endblock %}
+

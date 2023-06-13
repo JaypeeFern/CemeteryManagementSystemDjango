@@ -1,0 +1,29 @@
+{% load widget_tweaks %}
+<form method="POST" enctype="multipart/form-data">
+    {% csrf_token %}
+    <div class="modal-header">
+        <h3 class="modal-title">Add Location</h3>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+    </div>
+    <div class="modal-body">
+
+        <div class="row">
+            <div class="col-12">
+                <div class="form-floating mb-3">
+                    {{ form.grave_lot_id }}
+                    <label class="" for="">Enter Location/Lot Number</label>
+                </div>
+            </div>
+            <div class="col-12">
+                <div class="form-floating mb-3">
+                    {{ form.grave_area }}
+                    <label class="" for="">Enter Location/Lot Name</label>
+                </div>
+            </div>
+        </div>
+        
+    </div>
+    <div class="modal-footer">
+        <button type="submit" class="btn btn-primary">Save</button>
+    </div>
+</form>
