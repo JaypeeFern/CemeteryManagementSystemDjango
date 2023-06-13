@@ -3,7 +3,7 @@ Previous repo no longer accessible for some reason. Re-added here in new GitHub 
 
 ## Features
 1. Dynamic Search Based on Search Input 
-2. Grave Location Viewer for Deceased 
+2. Grave Location Viewer for Deceased (Powered by leaflet and OpenStreetMaps)
 3. Lot Reservation.
 
 ## Dependencies 
