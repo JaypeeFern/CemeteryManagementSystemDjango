@@ -1,0 +1,349 @@
+$body-gradient-custom: linear-gradient(to bottom, #2bb398, #1eb894, #14bd8e, #13c287, #1bc67e, #21c779, #27c874, #2dc96e, #2dc76d, #2ec56c, #2ec46b, #2ec26a);
+
+// Sass Color Variables (Use HSL for brightness adjustments)
+$bd-violet: hsl(260, 75%, 52%);
+$bd-green: hsl(141, 66%, 31%);
+
+body {
+  font-family: 'Poppins', sans-serif;
+}
+
+
+
+// .home-body-container, .home-body-container {
+//   background-repeat: no-repeat;
+//   background-size: cover;
+//   background-image: linear-gradient(135deg, transparent 0%, transparent 6%,rgba(71, 71, 71,0.04) 6%, rgba(71, 71, 71,0.04) 22%,transparent 22%, transparent 100%),linear-gradient(45deg, transparent 0%, transparent 20%,rgba(71, 71, 71,0.04) 20%, rgba(71, 71, 71,0.04) 47%,transparent 47%, transparent 100%),linear-gradient(135deg, transparent 0%, transparent 24%,rgba(71, 71, 71,0.04) 24%, rgba(71, 71, 71,0.04) 62%,transparent 62%, transparent 100%),linear-gradient(45deg, transparent 0%, transparent 73%,rgba(71, 71, 71,0.04) 73%, rgba(71, 71, 71,0.04) 75%,transparent 75%, transparent 100%),linear-gradient(90deg, rgb(255,255,255),rgb(255,255,255)); 
+//   // height: 100vh;
+// }
+
+// #loginForm, #registerForm{
+//   background-image: $body-gradient-custom;
+// }
+
+#search-table-box{
+	border-radius: .5rem;
+	padding-left: 1.6rem;
+	padding-right: 1.6rem;
+	padding-top: .5rem;
+	padding-bottom: 1rem;
+}
+
+.btn-custom {
+    --bs-btn-font-weight: 600;
+    --bs-btn-color: var(--bs-white);
+    --bs-btn-bg: none;
+    // --bs-btn-border-color: var(--bs-white);
+    --bs-btn-border-radius: .5rem;
+    --bs-btn-hover-color: var(--bs-white);
+    --bs-btn-hover-bg: #{shade-color($bd-green, 10%)};
+    --bs-btn-hover-border-color: #{shade-color($bd-green, 10%)};
+    --bs-btn-focus-shadow-rgb: var(--bd-green-rgb);
+    --bs-btn-active-color: var(--bs-btn-hover-color);
+    --bs-btn-active-bg: #{shade-color($bd-green, 20%)};
+    --bs-btn-active-border-color: #{shade-color($bd-green, 20%)};
+  }
+
+.login-background-bg {
+  position: relative;
+  isolation: isolate;
+  background-image: linear-gradient(0deg, rgb(164, 211, 160) 0%, rgb(164, 211, 160) 22%,rgb(141, 190, 127) 22%, rgb(141, 190, 127) 61%,rgb(117, 169, 93) 61%, rgb(117, 169, 93) 68%,rgb(94, 147, 60) 68%, rgb(94, 147, 60) 92%,rgb(70, 126, 26) 92%, rgb(70, 126, 26) 100%),linear-gradient(135deg, rgb(164, 211, 160) 0%, rgb(164, 211, 160) 22%,rgb(141, 190, 127) 22%, rgb(141, 190, 127) 61%,rgb(117, 169, 93) 61%, rgb(117, 169, 93) 68%,rgb(94, 147, 60) 68%, rgb(94, 147, 60) 92%,rgb(70, 126, 26) 92%, rgb(70, 126, 26) 100%),linear-gradient(90deg, rgb(164, 211, 160) 0%, rgb(164, 211, 160) 22%,rgb(141, 190, 127) 22%, rgb(141, 190, 127) 61%,rgb(117, 169, 93) 61%, rgb(117, 169, 93) 68%,rgb(94, 147, 60) 68%, rgb(94, 147, 60) 92%,rgb(70, 126, 26) 92%, rgb(70, 126, 26) 100%),linear-gradient(90deg, rgb(255, 159, 173),rgb(82, 81, 20)); background-blend-mode:overlay,overlay,overlay,normal;
+}
+
+.login-background-bg::after {
+  content: '';
+  position: absolute;
+  z-index: -1;
+  inset: 0;
+  background: #1a1a198a;
+  opacity: 0.50;
+
+}
+
+.home-nav-gradient {
+  background-image: linear-gradient(112.5deg, rgb(214, 214, 214) 0%, rgb(214, 214, 214) 10%,rgb(195, 195, 195) 10%, rgb(195, 195, 195) 53%,rgb(176, 176, 176) 53%, rgb(176, 176, 176) 55%,rgb(157, 157, 157) 55%, rgb(157, 157, 157) 60%,rgb(137, 137, 137) 60%, rgb(137, 137, 137) 88%,rgb(118, 118, 118) 88%, rgb(118, 118, 118) 91%,rgb(99, 99, 99) 91%, rgb(99, 99, 99) 100%),linear-gradient(157.5deg, rgb(214, 214, 214) 0%, rgb(214, 214, 214) 10%,rgb(195, 195, 195) 10%, rgb(195, 195, 195) 53%,rgb(176, 176, 176) 53%, rgb(176, 176, 176) 55%,rgb(157, 157, 157) 55%, rgb(157, 157, 157) 60%,rgb(137, 137, 137) 60%, rgb(137, 137, 137) 88%,rgb(118, 118, 118) 88%, rgb(118, 118, 118) 91%,rgb(99, 99, 99) 91%, rgb(99, 99, 99) 100%),linear-gradient(135deg, rgb(214, 214, 214) 0%, rgb(214, 214, 214) 10%,rgb(195, 195, 195) 10%, rgb(195, 195, 195) 53%,rgb(176, 176, 176) 53%, rgb(176, 176, 176) 55%,rgb(157, 157, 157) 55%, rgb(157, 157, 157) 60%,rgb(137, 137, 137) 60%, rgb(137, 137, 137) 88%,rgb(118, 118, 118) 88%, rgb(118, 118, 118) 91%,rgb(99, 99, 99) 91%, rgb(99, 99, 99) 100%),linear-gradient(90deg, rgb(195, 195, 195),rgb(228, 228, 228)); background-blend-mode:overlay,overlay,overlay,normal;
+}
+
+.feature-nav-gradient-bg {
+  background-image: repeating-linear-gradient(45deg, rgba(253, 227, 38,0.1) 0px, rgba(253, 227, 38,0.1) 1px,transparent 1px, transparent 11px),repeating-linear-gradient(135deg, rgba(253, 227, 38,0.1) 0px, rgba(253, 227, 38,0.1) 1px,transparent 1px, transparent 11px),linear-gradient(90deg, rgb(55, 150, 84),rgb(79, 148, 16));
+}
+
+.table-gradient {
+  background-image: linear-gradient(340deg, rgba(76,76,76, 0.0196078431372549) 0%, rgba(76,76,76, 0.0196078431372549) 34%,transparent 34%, transparent 67%,rgba(142,142,142, 0.0196078431372549) 67%, rgba(142,142,142, 0.0196078431372549) 73%,rgba(151, 151, 151,0.02) 73%, rgba(151, 151, 151,0.02) 100%),linear-gradient(320deg, rgba(145, 145, 145,0.02) 0%, rgba(145, 145, 145,0.02) 10%,transparent 10%, transparent 72%,rgba(35, 35, 35,0.02) 72%, rgba(35, 35, 35,0.02) 76%,rgba(69, 69, 69,0.02) 76%, rgba(69, 69, 69,0.02) 100%),linear-gradient(268deg, rgba(128, 128, 128,0.02) 0%, rgba(128, 128, 128,0.02) 5%,transparent 5%, transparent 76%,rgba(78, 78, 78,0.02) 76%, rgba(78, 78, 78,0.02) 83%,rgba(224, 224, 224,0.02) 83%, rgba(224, 224, 224,0.02) 100%),linear-gradient(198deg, rgba(25, 25, 25,0.02) 0%, rgba(25, 25, 25,0.02) 36%,transparent 36%, transparent 85%,rgba(180, 180, 180,0.02) 85%, rgba(180, 180, 180,0.02) 99%,rgba(123, 123, 123,0.02) 99%, rgba(123, 123, 123,0.02) 100%),linear-gradient(90deg, rgb(194,226,190),rgb(194,226,190));
+}
+
+// Text Size Variables
+$txt-1080p: 5rem;
+$txt-1366p: 5.2rem;
+$textjustify: justify;
+
+// Temp Media Queries for my monitor sizes (Change to be dynamic to all device sizes later on)
+// Min-Max Width Breakpoints (Create New Class & @include breakpoint map variable)
+
+@include media-breakpoint-up(xxl) {
+
+  .main-header {
+    font-size: $txt-1080p !important;
+    }
+
+  .body-2-text {
+    text-align: $textjustify;
+    font-size: 1.5rem !important;
+  }
+  
+  .body-3-text {
+    text-align: $textjustify;
+    font-size: 1.9rem !important;
+  }
+
+  .body-4-text {
+    text-align: $textjustify;
+    font-size: 1.3rem !important;
+  }
+
+}
+
+@include media-breakpoint-only(xl) {
+  .main-header {
+    font-size: $txt-1366p !important;
+  }
+}
+
+.main-body {
+  width: 100%;
+  // min-height: 65vh;
+  min-height: 100vh;
+  background: url('../assets/20221105_165010.jpg');
+  // background-image: linear-gradient(45deg, rgb(179, 251, 80) 0%, rgb(179, 251, 80) 1%,rgb(164, 235, 91) 1%, rgb(164, 235, 91) 3%,rgb(149, 219, 101) 3%, rgb(149, 219, 101) 12%,rgb(134, 202, 112) 12%, rgb(134, 202, 112) 18%,rgb(119, 186, 122) 18%, rgb(119, 186, 122) 25%,rgb(104, 170, 133) 25%, rgb(52, 183, 57) 100%);
+  background-size: cover;
+  position: relative;
+  isolation: isolate;
+}
+
+.main-body::after {
+  content: '';
+  position: absolute;
+  z-index: -1;
+  inset: 0;
+  background: rgb(24, 118, 57);
+  opacity: 0.4;
+
+}
+
+/*--------------------------------------------------------------
+# Features
+--------------------------------------------------------------*/
+.features .icon-box {
+  padding: 30px;
+  position: relative;
+  overflow: hidden;
+  background: #fff;
+  box-shadow: 0 0 29px 0 rgba(68, 88, 144, 0.12);
+  transition: all 0.3s ease-in-out;
+  border-radius: 8px;
+  z-index: 1;
+}
+
+.features .icon-box::before {
+  content: "";
+  position: absolute;
+  background: #cbe0fb;
+  right: 0;
+  left: 0;
+  bottom: 0;
+  top: 100%;
+  transition: all 0.3s;
+  z-index: -1;
+}
+
+.features .icon-box:hover::before {
+  background: #4FB060;
+  top: 0;
+  border-radius: 0px;
+}
+
+.features .icon {
+  margin-bottom: 15px;
+}
+
+.features .icon i {
+  font-size: 48px;
+  line-height: 1;
+  color: #4FB060;
+  transition: all 0.3s ease-in-out;
+}
+
+.features .title {
+  font-weight: 700;
+  margin-bottom: 15px;
+  font-size: 18px;
+}
+
+.features .title a {
+  color: #111;
+}
+
+.features .description {
+  font-size: 15px;
+  line-height: 28px;
+  margin-bottom: 0;
+}
+
+.features .icon-box:hover .title a,
+.features .icon-box:hover .description {
+  color: #fff;
+}
+
+.features .icon-box:hover .icon i {
+  color: #fff;
+}
+
+/*--------------------------------------------------------------
+# About
+--------------------------------------------------------------*/
+.about .content h3 {
+  font-weight: 600;
+  font-size: 26px;
+}
+
+.about .content ul {
+  list-style: none;
+  padding: 0;
+}
+
+.about .content ul li {
+  display: flex;
+  align-items: flex-start;
+  margin-bottom: 35px;
+}
+
+.about .content ul li:first-child {
+  margin-top: 35px;
+}
+
+.about .content ul i {
+  background: #fff;
+  box-shadow: 0px 6px 15px rgba(16, 110, 234, 0.12);
+  font-size: 24px;
+  padding: 20px;
+  margin-right: 15px;
+  color: #187639;
+  border-radius: 50px;
+}
+
+.about .content ul h5 {
+  font-size: 18px;
+  color: #555555;
+}
+
+.about .content ul p {
+  font-size: 15px;
+}
+
+.about .content p:last-child {
+  margin-bottom: 0;
+}
+
+/*--------------------------------------------------------------
+# Sections General
+--------------------------------------------------------------*/
+section {
+  padding: 60px 0;
+  overflow: hidden;
+}
+
+.section-bg {
+  background-color: #f6f9fe;
+}
+
+.section-title {
+  text-align: center;
+  padding-bottom: 30px;
+}
+
+.section-title h2 {
+  font-size: 13px;
+  letter-spacing: 1px;
+  font-weight: 700;
+  padding: 8px 20px;
+  margin: 0;
+  background: #e7f1fd;
+  color: #187639;
+  display: inline-block;
+  text-transform: uppercase;
+  border-radius: 50px;
+}
+
+.section-title h3 {
+  margin: 15px 0 0 0;
+  font-size: 32px;
+  font-weight: 700;
+}
+
+.section-title h3 span {
+  color: #187639;
+}
+
+.section-title p {
+  margin: 15px auto 0 auto;
+  font-weight: 600;
+}
+
+@media (min-width: 1024px) {
+  .section-title p {
+    width: 50%;
+  }
+}
+
+
+/*--------------------------------------------------------------
+# Navbar Home
+--------------------------------------------------------------*/
+
+#navbarText {
+
+ul {
+    list-style: none;
+    margin: 0;
+    display: flex;
+    justify-content: flex-end;
+    // align-items: center;
+    // padding: .3em 0;
+  }
+
+li a {
+    text-decoration: none;
+    color: $bd-green;
+    padding-right: 1.5em;
+    position: relative;
+    transition: all ease-in-out 250ms;
+  }
+
+li a::after {
+    content: "";
+    position: absolute;
+    display: block;
+    height: 0.2em;
+    width: 0%;
+    background-color: green;
+    bottom: -0.2em;
+    transition: all ease-in-out 250ms;
+  }
+
+li a:hover::after {
+    width: 65%;
+  }
+
+li a:hover {
+    color: green;
+  }
+
+}
+
+
+
+
+
+
+
+

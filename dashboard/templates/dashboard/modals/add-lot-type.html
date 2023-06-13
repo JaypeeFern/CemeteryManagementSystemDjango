@@ -1,0 +1,27 @@
+{% load widget_tweaks %}
+<form method="POST" enctype="multipart/form-data">
+    {% csrf_token %}
+    <div class="modal-header">
+        <h3 class="modal-title">Add Lot Type</h3>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+    </div>
+    <div class="modal-body">
+        
+        <div class="form-group mb-3">
+            <label class="" for="">Area Image</label>
+            {{ form.Lot_Photo }}
+        </div>
+        <div class="form-floating mb-3">
+            {{ form.Lot_Name }}
+            <label class="" for="">Lot Name</label>
+        </div>
+        <div class="form-floating mb-3">
+            {{ form.Lot_Descriptions }}
+            <label class="" for="">Lot Description</label>
+        </div>
+        
+    </div>
+    <div class="modal-footer">
+        <button type="submit" class="btn btn-primary">Save</button>
+    </div>
+</form>

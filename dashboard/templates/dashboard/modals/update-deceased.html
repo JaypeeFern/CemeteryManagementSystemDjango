@@ -1,0 +1,50 @@
+{% load widget_tweaks %}
+<form method="POST" enctype="multipart/form-data">
+    {% csrf_token %}
+    <div class="modal-header">
+        <h3 class="modal-title">Update Deceased: <strong class="fs-4">ID: {{data.id}}</strong></h3>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+    </div>
+    <div class="modal-body">
+
+        <div class="row">
+            <div class="col-12 ">
+                <div class="form-floating mb-3">
+                    {{ form.name }}
+                    <label class="" for="">Name</label>
+                </div>
+            </div>
+            <div class="col-12 col-md-6">
+                <div class="form-floating mb-3">
+                    {{ form.born }}
+                    <label class="" for="">Birthday</label>
+                </div>
+            </div>
+            <div class="col-12 col-md-6">
+                <div class="form-floating mb-3">
+                    {{ form.died }}
+                    <label class="" for="">Died on</label>
+                </div>
+            </div>
+            <div class="col-12 ">
+                <div class="form-floating mb-3">
+                    {{ form.location }}
+                    <label class="" for="">Location</label>
+                </div>
+            </div>
+            
+            <div class="col">
+                <div class="form-group mb-3">
+                    <label class="" for="">Grave Image</label>
+                    <!-- <input class="form-check-input ms-2" type="checkbox" id="removeimage">
+                    <label class="form-check-label" for="removeimage">Clear Image</label> -->
+                    {{ form.graveimage }}
+                </div>
+            </div>
+        </div>
+        
+    </div>
+    <div class="modal-footer">
+        <button type="submit" class="btn btn-primary">Update</button>
+    </div>
+</form>

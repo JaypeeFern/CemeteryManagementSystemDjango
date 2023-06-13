@@ -1,0 +1,49 @@
+// To add new variables to map get map name at _variables.scss then follow below format
+
+// Create your own custom_color map
+$custom-colors: (
+    "violet-rgb": rgb(101, 40, 224),
+    "violet": #6528E0,
+    "memorial": #187639,
+    'lot1': #836849,
+    'lot2': #96D1BF,
+    'lot3': #E6F0B1,
+    'lot4': #B8BFCD,
+    'lot5': #D8917A,
+    'lot6': #8DB9C8,
+    'lot7': #E4BB78,
+    'lot8': #B0D97D,
+    'lot9': #E4CDD5,
+    'lot10': #CBD5CC,
+    'lot11': #B797B8,
+    'lot12': #C2E2BE,
+    'lot14': #E6E382,
+    'lot15': #B74774,
+    'lot16': #5AB17E,
+    'lot17': #836849
+);
+$theme-colors: map-merge($theme-colors, $custom-colors);
+// ------------------------------------------------------
+
+// Create your own custom_font-size map
+$custom-font-size: (
+    7: 4rem
+);
+$display-font-sizes: map-merge($display-font-sizes, $custom-font-size);
+// ------------------------------------------------------
+
+// Create your own custom_spacer map
+$custom_spacer: (
+    6: $spacer * 13
+);
+$spacers: map-merge($spacers, $custom_spacer);
+// ------------------------------------------------------
+
+// Create your own custom_breakpoints map
+// $custom_breakpoints: (
+//     custom1: 1366px,
+//     custom2: 2000px
+// );
+// $grid-breakpoints: map-merge($grid-breakpoints, $custom_breakpoints);
+// -----------
+

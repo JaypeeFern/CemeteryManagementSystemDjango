@@ -1,0 +1,101 @@
+{% extends "dashboard/layout.html" %}
+{% block body %}
+{% load static %}
+
+<div class="container-scroller d-flex">
+    <!-- partial:./partials/_sidebar.html -->
+    {% include 'dashboard/components/sidebar.html' %}
+    <!-- partial -->
+    <div class="container-fluid page-body-wrapper">
+      <!-- partial:./partials/_navbar.html -->
+    {% include 'dashboard/components/topnav.html' %}
+      <!-- partial -->
+      <div class="main-panel">
+        <div class="content-wrapper">
+            <div class="row">
+                <div class="col-lg-12 grid-margin stretch-card">
+                  <div class="card border-1 border-secondary">
+                    <div class="card-body">
+                        <div class="controls ms-2 mb-4">
+                            <div class="row">
+                                <div class="col-12 d-flex gap-2 justify-content-start">
+                                  <span class="align-self-center fw-bold">Options:</span>
+                                  <button type="button" class="btn btn-primary btn-sm" id="add_location">Add Location</button>
+                                </div>
+                            </div>
+                        </div>
+                        <hr>
+                      <div class="table-responsive">
+                        <table id="example" class="table table-hover table-striped table-bordered">
+                          <thead>
+                            <tr>
+                              <th>ID</th>
+                              <th>Location/Lot Name</th>
+                              <th>Action</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            {% for data in data %}
+                            <tr>
+                              <td>{{ data.id }}</td>
+                              <td>
+                                <span class="fs-6 mb-2 text-success fw-bold">{{ data.grave_area }}</span>
+                                <br>
+                                <span class="fs-6" style="font-size: 0.9rem;">Lot Number: {{ data.grave_lot_id }}</span>
+                              </td>
+                              <td>
+                                  <button type="button" class="update-location btn btn-outline-success btn-sm me-2" data-form-url="{% url 'UpdateLocation' data.id %}">
+                                    <i class="mdi mdi-square-edit-outline"></i>
+                                  </button>
+                                  {% if user.is_superuser %}
+                                  <button type="button" class="delete-location btn btn-outline-danger btn-sm" data-form-url="{% url 'DeleteLocation' data.id %}">
+                                    <i class="mdi mdi-trash-can-outline"></i>
+                                  </button>
+                                  {% endif %}
+                              </td>
+                            </tr>
+                            {% endfor %}
+                          </tbody>
+                        </table>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+        </div>
+        <!-- content-wrapper ends -->
+        <!-- partial:./partials/_footer.html -->
+      {% include 'dashboard/components/footer.html' %}
+        <!-- partial -->
+      </div>
+      <!-- main-panel ends -->
+    </div>
+    <!-- page-body-wrapper ends -->
+  </div>
+  <!-- container-scroller -->
+
+
+<!-- Create Modal -->
+{% include 'dashboard/modals/layout-create-modal.html' %}
+
+<!-- Update Modal -->
+{% include 'dashboard/modals/layout-update-modal.html' %}
+
+<!-- CRUD Functions -->
+{% include 'dashboard/components/crud-scripts.html' %}
+
+<script>
+    $(document).ready(function () {
+    $('#example').DataTable({
+      "bStateSave": true,
+      'columnDefs': [
+            {'width': '0%', 'targets': 0},
+            {'width': '10%', 'targets': 1},
+            {'width': '1%', 'targets': 2}
+        ]
+    });
+    });
+</script>
+
+{% endblock %}
+

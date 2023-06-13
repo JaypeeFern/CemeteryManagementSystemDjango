@@ -1,0 +1,118 @@
+{% load widget_tweaks %}
+<form method="POST" enctype="multipart/form-data">
+    {% csrf_token %}
+    <div class="modal-header">
+        <h3 class="modal-title">Add Customer {{ test }}</h3>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+    </div>
+    <div class="modal-body">
+        
+        <div class="row mb-3">
+            <div class="col-12 col-md-6 align-self-center text-black-50">
+                Customer Information
+            </div>
+            <div class="col align-self-center d-none d-md-block ">
+                <hr class="border border-dark border-1 opacity-25">
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-12 col-md-6">
+                <div class="form-floating mb-3">
+                    {{ form.first_Name }}
+                    <label for=""><span class="text-danger fw-bolder">*</span>First Name</label>
+                </div>
+            </div>
+            <div class="col-12 col-md-6">
+                <div class="form-floating mb-3">
+                    {{ form.last_Name }}
+                    <label for=""><span class="text-danger fw-bolder">*</span>Last Name</label>
+                </div>  
+            </div>
+            <div class="col-12">
+                <div class="form-floating mb-3">
+                    {{ form.contact_Number }}
+                    <label for=""><span class="text-danger fw-bolder">*</span>Contact Number</label>
+                </div>
+            </div>
+        </div>
+
+        <div class="row mb-3">
+            <div class="col-12 col-md-6 align-self-center text-black-50">
+                Deceased Information
+            </div>
+            <div class="col align-self-center d-none d-md-block ">
+                <hr class="border border-dark border-1 opacity-25">
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-12 flex-grow">
+                <div class="form-floating mb-3">
+                    {{ form.deceased_Name }}
+                    <label for=""><span class="text-danger fw-bolder">*</span>Deceased Name</label>
+                </div>
+            </div>
+            <div class="col-12 col-md-6">
+                <div class="form-floating mb-3">
+                    {{ form.born_Date }}
+                    <label for=""><span class="text-danger fw-bolder">*</span>Birthday</label>
+                </div>
+            </div>
+            <div class="col-12 col-md-6">
+                <div class="form-floating mb-3">
+                    {{ form.died_Date }}
+                    <label for=""><span class="text-danger fw-bolder">*</span>Died on</label>
+                </div>
+            </div>
+            <div class="col-12">
+                <div class="form-floating mb-3">
+                    {{ form.burial_Schedule }}
+                    <label for=""><span class="text-danger fw-bolder">*</span>Preferred Schedule</label>
+                </div>
+            </div>
+        </div>
+        
+        <div class="row mb-3">
+            <div class="col-12 col-md-6 align-self-center text-black-50">
+                Chosen Garden Information
+            </div>
+            <div class="col align-self-center d-none d-md-block ">
+                <hr class="border border-dark border-1 opacity-25">
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-12 col-md-6">
+                <div class="form-floating mb-3">
+                    {{ form.chosen_Lot }}
+                    <label for=""><span class="text-danger fw-bolder">*</span>Chosen Location/Lot</label>
+                </div>
+            </div>
+            <div class="col-12 col-md-6">
+                <div class="form-floating mb-3">
+                    {{ form.chosen_Lot_Type }}
+                    <label for=""><span class="text-danger fw-bolder">*</span>Chosen Lot Type</label>
+                </div>
+            </div>
+        </div>
+
+        <div class="row mb-3">
+            <div class="col-12 col-md-6 align-self-center text-black-50">
+                Customer Status
+            </div>
+            <div class="col align-self-center d-none d-md-block ">
+                <hr class="border border-dark border-1 opacity-25">
+            </div>
+        </div>
+
+        <div class="form-floating mb-3">
+            {{ form.status }}
+            <label for=""><span class="text-danger fw-bolder">*</span>Status</label>
+        </div>
+
+    </div>
+    <div class="modal-footer">
+        <button type="submit" class="btn btn-primary">Save</button>
+    </div>
+</form>

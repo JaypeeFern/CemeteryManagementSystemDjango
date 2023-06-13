@@ -1,0 +1,284 @@
+{% extends "home/feature-layout.html" %}
+{% block body %}
+{% load static %}
+{% if user.is_authenticated %}
+
+<div class="container-fluid mt-3 mb-2 pb-3 ">
+  <div class="card bg-light">
+    <div class="card-header bg-memorial border-0">
+        <div class="row d-flex ">
+            <div class="col-12">
+                <p class="text-uppercase text-white fw-bold mt-2 border-bottom">Lot Procurement</p>
+            </div>
+            <div class="col-12 col-md-8 align-self-center">
+                <span class="text-justify text-white fw-light">
+                    Surigao Memorial Park offers a variety of plots at affordable prices. Click the buy now button to 
+                    reserve your plot now. 
+                </span>
+            </div>
+            <div class="col-12 col-md-4 d-flex justify-content-center my-2 mt-md-0 justify-content-md-end">
+                <button type="button" class="btn btn-outline-light btn-sm fw-bold" data-bs-toggle="modal" data-bs-target="#status">Status</button>
+                <button type="button" class="btn btn-outline-light btn-sm fw-bold ms-2" data-bs-toggle="modal" data-bs-target="#descriptions">Lot Descriptions</button>
+            </div>
+        </div>
+    </div>
+    <div class="card-body border border-memorial border-1 border-opacity-50"s>
+      <div class="container-fluid">
+          <div class="row gx-3 gy-3 justify-content-lg-start">
+              {% for data in data %}
+              <div class="col-12 col-sm-6 col-lg-3 animate__animated animate__fadeIn">
+                <!-- <div class="col-sm-12 col-md-6 col-lg-4 col-xl-3 animate__animated animate__fadeIn"> -->
+                  <div class="card">  
+                      <figure id="pop">
+                        {% if data.Lot_Image %}
+                          <img id="zoomable" src="{{ data.Lot_Image.url}}" class="card-img-top" alt="..." style="max-height: 227px; min-height: 227px;">
+                        {% else %}
+                          <img src="{% static 'home/assets/image-not-found.png' %}" class="card-img-top" alt="..." style="max-height: 227px;">
+                        {% endif %}
+                      </figure>
+                      <div class="card-body d-flex flex-column flex-fill" style="height: 19rem;">
+                          <h6 class="card-title fw-bold">{{ data.Garden_Name }}</h6>
+                          <small><span class="form-text mb-0 pb-0">Last Update: {{ data.Date_Modified | date:"F, d, Y" }}</span></small>
+                          <hr class="text-success border-2 opacity-100 mt-2 mb-1">
+                          <ul class="card-text list-unstyled mt-2">
+                              <li>Available Space: <strong>{{ data.Available_Space }}</strong></li>
+                              <li>Available Lot Types: </li>
+                              <ul class="card-text">
+                                  {% if data.Available_Space <= 0 %}
+                                  {% else %}
+                                  {% for data in data.Lot_Type.all %}
+                                  <li><strong>{{ data }}</strong></li>
+                                  {% endfor %}
+                                  {% endif %}
+                              </ul>
+                              <!-- <li>Lot Price: <strong>TBA</strong></li>  -->
+                          </ul>
+                          {% if data.Available_Space <= 0 %}
+                          <button type="button" class="btn btn-outline-success mt-auto disabled">Out of Space</button>
+                          {% else %}
+                          <button type="button" class="btn btn-outline-success mt-auto" data-bs-toggle="modal" data-bs-target="#{{data.Garden_Name|slugify}}">Reserve yours now!</button>
+                          {% endif %}
+                      </div>
+                  </div>
+              </div>
+              <!-- ---------------- RETURN FOR LOOP HERE IN CASE OF ERROR ---------------- -->
+              
+              
+              <!-- Form Modal -->
+              <div class="modal fade" id="{{data.Garden_Name|slugify}}" tabindex="-1" aria-labelledby="reserve-label" aria-hidden="true" data-bs-backdrop="static">
+                  <div class="modal-dialog modal-lg modal-dialog-centered">
+                      <div class="modal-content">
+                      
+                          <div class="body container">
+                            <div class="main row">
+                              
+                                <div class="left col-12 col-sm-12">
+                                    <nav class="navbar bg-light mb-3">
+                                        <div class="container-fluid">
+                                            <a href="" class="navbar-brand" data-bs-dismiss="modal" aria-label="Close">
+                                                <img src="{% static 'home/assets/test.svg' %}" alt="" width="30" height="30"
+                                                    class="d-inline-block align-text-top">
+                                                <span class="fs-6 lead">Surigao Memorial Park:</span>
+                                            </a>
+                                            <div class="lead text-uppercase fw-bold fs-6 d-none d-lg-flex">Lot Reservation Form</div>
+                                        </div>
+                                    </nav>        
+                                    <div class="container-fluid me-0 pe-0">
+                                        <div class="reservation body">
+                                            <div class="container">
+                                                <div class="body-main row">
+                                                    <div class="body-left col-12">
+                                                        <div class="row ">   
+                                                            <div class="row">
+                                                                <div class="col-12">
+                                                                    <div class="container mb-2">
+
+                                                                        <div class="desktop-form">
+                                                                            {% include 'procurement/reservation-form-mobile.html' %}
+                                                                        </div>
+
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Footer -->
+                                <div class="right col-12 col-sm-12 login-background-bg d-flex flex-column justify-content-center">
+                                    <div class="row my-4">
+                                        <div class="col-12 text-white">
+                                            <p class="fw-bold text-center display-5 mt-3 mt-sm-0">Further Inquiries?</p>
+                                            <p class="fw-light text-center fs-5">Please contact these numbers: <br> SMART - 0000-0000-0000 <br> GLOBE - 00-0000-00000 </p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!--  -->
+
+                            </div>
+                        </div>
+
+                      </div>
+                  </div>
+              </div>  
+              {% endfor %}
+          </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ---------------------------- Status Modal ----------------------------- -->
+<div class="modal fade" id="status" tabindex="-1" data-bs-backdrop="static" aria-labelledby="status" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-scrollable modal-dialog-centered modal-fullscreen-sm-down">
+      <div class="modal-content">
+        <div class="modal-header d-flex justify-content-between">
+            <a href="" class="navbar-brand d-flex align-items-center" data-bs-dismiss="modal" aria-label="Close">
+                <img src="{% static 'home/assets/test.svg' %}" alt="" width="30" height="30"
+                    class="d-inline-block align-text-top">
+                <span class="fs-6 lead">Surigao Memorial Park</span>
+            </a>
+            <div class="text-uppercase fw-bold small d-none d-lg-flex">Reserve Status List</div>
+        </div>
+        <div class="modal-body">
+            {% for data in data4 %}
+            <div class="accordion accordion-flush" >
+                <div class="accordion-item">
+                    <h2 class="accordion-header">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#{{data.reference_number}}" aria-expanded="false">
+                        <div class="d-flex w-100 justify-content-between">
+                            <span class="fs-6 fw-bold text-memorial flex-fill">
+                                <span class="text-muted">ID: </span>
+                                {{data.reference_number}} 
+                                {% if data.status %}
+                                <i class="mdi mdi-check-decagram"></i>
+                                {% else %}
+                                <i class="mdi mdi-close-octagon text-danger"></i>
+                                {% endif %}
+                            </span>
+                            <span class="text-muted me-2" style="font-size: .8rem;">{{data.date_created|date:"D - M j, Y"}}</span>
+                        </div>
+                    </button>
+                    </h2>
+                    <div id="{{data.reference_number}}" class="accordion-collapse collapse">
+                        <div class="accordion-body">
+                            <div class="row">
+                                <!-- ---------------------------- Customer Info ---------------------------- -->
+                                <div class="col-12">
+                                    <span class="small text-memorial">Customer Information</span>
+                                    <hr class="my-0 py-1">
+                                </div>
+                                <div class="col-12">
+                                    <span class="small text-muted">Name:</span>
+                                    <span class="small">{{data.first_Name}} {{data.last_Name}}</span>
+                                </div>
+                                <div class="col-12 mb-2">
+                                    <span class="small text-muted">Contact Number:</span>
+                                    <span class="small">{{data.contact_Number}}</span>
+                                </div>
+                                <!-- ---------------------------------- x ---------------------------------- -->
+                                <!-- ---------------------------- Deceased Info ---------------------------- -->
+                                <div class="col-12">
+                                    <span class="small text-memorial">Deceased Information</span>
+                                    <hr class="my-0 py-1">
+                                </div>
+                                <div class="col-12">
+                                    <span class="small text-muted">Name:</span>
+                                    <span class="small">{{data.deceased_Name}}</span>
+                                </div>
+                                <div class="col-12 mb-2">
+                                    <span class="small text-muted">Birth:</span>
+                                    <span class="small">{{data.born_Date}}</span>
+                                    <br>
+                                    <span class="small text-muted">Died:</span>
+                                    <span class="small">{{data.died_Date}}</span>
+                                </div>
+                                <!-- ---------------------------------- x ---------------------------------- -->
+                                <!-- ------------------------- Internment Schedule ------------------------- -->
+                                <div class="col-12">
+                                    <span class="small text-memorial">Internment Schedule</span>
+                                    <hr class="my-0 py-1">
+                                </div>
+                                <div class="col-12">
+                                    <span class="small text-muted">Burial Schedule:</span>
+                                    <span class="small">{{data.burial_Schedule}}</span>
+                                </div>
+                                <div class="col-12">
+                                    <span class="small text-muted">Chosen Lot:</span>
+                                    <span class="small">{{data.chosen_Lot}}</span>
+                                    <br>
+                                    <span class="small text-muted">Chosen Lot Type:</span>
+                                    <span class="small">{{data.chosen_Lot_Type}}</span>
+                                </div>
+                                <!-- ---------------------------------- x ---------------------------------- -->
+                            </div>                
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-success" data-bs-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+<!-- ---------------------------------- x ---------------------------------- -->
+
+<!-- ------------------------ Lot Description Moda ------------------------- -->
+<div class="modal fade" id="descriptions" tabindex="-1" data-bs-backdrop="static" aria-labelledby="descriptions" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-scrollable modal-dialog-centered modal-xl modal-fullscreen-sm-down">
+      <div class="modal-content">
+        <div class="modal-header d-flex justify-content-between">
+            <a href="" class="navbar-brand d-flex align-items-center" data-bs-dismiss="modal" aria-label="Close">
+                <img src="{% static 'home/assets/test.svg' %}" alt="" width="30" height="30"
+                    class="d-inline-block align-text-top">
+                <span class="fs-6 lead">Surigao Memorial Park</span>
+            </a>
+            <div class="text-uppercase fw-bold small d-none d-lg-flex">Lot Descriptions</div>
+        </div>
+        <div class="modal-body">
+            <div class="row">
+                {% for desc in data2 %}
+                <div class="col-12 col-md-4 mb-3 mb-md-0">
+                    <div class="row">
+                        <div class="col-12 text-center">
+                            {% if desc.Lot_Photo %}
+                            <img id="zoomable" class="img-fluid img-thumbnail border border-2 border-memorial" src="{{desc.Lot_Photo.url}}" style="max-width: 335px; max-height: 225px;">
+                            {% endif %}
+                            <hr class="text-success border-2 opacity-100">
+                        </div>
+                        <div class="col-12">
+                            <span class="fw-bold fs-6">{{desc.Lot_Name}}</span>
+                        </div>
+                        <div class="col-12">
+                            {{desc.Lot_Descriptions}}
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-success" data-bs-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+<!-- ---------------------------------- x ---------------------------------- -->
+{% else %}
+{% include 'home/access-denied.html' %}
+{% endif %}
+
+<script>
+Zoom("#zoomable", {
+    background: "rgba(0, 0, 0, .8)",
+});
+</script>
+
+{% endblock %}

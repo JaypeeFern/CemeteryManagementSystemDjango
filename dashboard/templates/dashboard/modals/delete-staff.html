@@ -1,0 +1,23 @@
+<form method="post" action="">
+    {% csrf_token %}
+  
+    <div class="modal-header">
+      <h3 class="modal-title">Delete Account ID: {{ data.id }}</h3>
+      <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+        <span aria-hidden="true"></span>
+      </button>
+    </div>
+  
+    <div class="modal-body">
+      {% if data.is_staff == True and data.is_superuser == False %}
+      <p class="fs-6">Are you sure you want to delete <strong>staff</strong> user <strong>{{ data.username }}</strong> from the system?</p>
+      {% elif data.is_superuser == True and data.is_staff == True %}
+      <p class="fs-6">Are you sure you want to delete <strong>admin</strong> user <strong>{{ data.username }}</strong> from the system?</p>
+      {% endif %}
+    </div>
+  
+    <div class="modal-footer">
+      <button type="submit" class="btn btn-outline-danger">Delete</button>
+    </div>
+  
+  </form>

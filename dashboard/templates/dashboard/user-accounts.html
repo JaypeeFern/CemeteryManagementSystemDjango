@@ -1,0 +1,115 @@
+{% extends "dashboard/layout.html" %}
+{% block body %}
+{% load static %}
+
+<div class="container-scroller d-flex">
+    <!-- partial:./partials/_sidebar.html -->
+    {% include 'dashboard/components/sidebar.html' %}
+    <!-- partial -->
+    <div class="container-fluid page-body-wrapper">
+      <!-- partial:./partials/_navbar.html -->
+    {% include 'dashboard/components/topnav.html' %}
+      <!-- partial -->
+      <div class="main-panel">
+        <div class="content-wrapper">
+            <div class="row">
+                <div class="col-lg-12 grid-margin stretch-card">
+                  <div class="card border-1 border-secondary">
+                    <div class="card-body">
+                      <div class="controls ms-2 mb-4">
+                        <div class="row">
+                            <div class="col-12 d-flex gap-2 justify-content-start">
+                                <span class="align-self-center fw-bold">Options:</span>
+                                <button type="button" class="btn btn-primary btn-sm" id="add_user">Add New User</button>
+                            </div>
+                        </div>
+                      </div>
+                      <hr>
+                      <div class="table-responsive">
+                        <table id="example" class="table table-hover table-striped table-bordered">
+                          <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Username</th>
+                                <th>Fullname</th>
+                                <th>Account Status</th>
+                                <th>Action</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                          {% for data in data %}
+                            <tr>
+                              <td class="fs-6">{{data.pk}}</td>
+                              <td class="fs-6 text-success fw-bold">{{data.username}}</td>
+                              <td class="fs-6">
+                                {% if data.first_name %}
+                                {{data.first_name}}
+                                {% else %}
+                                N/A
+                                {% endif %}
+                              </td>
+                              <td>
+                                {% if data.is_active %}
+                                  <span class="badge bg-success fw-bold fs-6">Active</span>
+                                {% else %}
+                                  <span class="badge bg-danger fw-bold fs-6">Inactive</span>
+                                {% endif %}
+                              </td>
+                              <td>
+                                <button type="button" class="update-user btn btn-outline-success btn-sm me-1" data-form-url="{% url 'UpdateUser' data.id %}">
+                                  <i class="mdi mdi-square-edit-outline"></i>
+                                </button>
+                                {% if user.is_superuser %}
+                                <button type="button" class="delete-user btn btn-outline-danger btn-sm" data-form-url="{% url 'DeleteUser' data.id %}">
+                                  <i class="mdi mdi-trash-can-outline"></i>
+                                </button>
+                                {% endif %}}
+                              </td>
+                            </tr>
+                           {% endfor %}
+                          </tbody>
+                        </table>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+        </div>
+        <!-- content-wrapper ends -->
+        <!-- partial:./partials/_footer.html -->
+      {% include 'dashboard/components/footer.html' %}
+        <!-- partial -->
+      </div>
+      <!-- main-panel ends -->
+    </div>
+    <!-- page-body-wrapper ends -->
+  </div>
+  <!-- container-scroller -->
+
+<!-- Create Modal -->
+{% include 'dashboard/modals/layout-create-modal.html' %}
+
+<!-- Update Modal -->
+{% include 'dashboard/modals/layout-update-modal.html' %}
+
+<!-- CRUD Functions -->
+{% include 'dashboard/components/crud-scripts.html' %}
+
+
+<script>
+    $(document).ready(function () {
+    $('#example').DataTable({
+        "lengthMenu": [15, 30, 50, 75, 100],
+        "bStateSave": true,
+        'columnDefs': [
+            {'width': '0%', 'targets': 0},
+            {'width': '10%', 'targets': 1},
+            {'width': '10%', 'targets': 2},
+            {'width': '10%', 'targets': 3},
+            {'width': '5%', 'targets': 4},
+        ]
+    });
+    });
+</script>
+{% endblock %}
+

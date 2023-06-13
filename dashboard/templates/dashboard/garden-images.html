@@ -1,0 +1,94 @@
+{% extends "dashboard/layout.html" %}
+{% block body %}
+{% load static %}
+
+<div class="container-scroller d-flex">
+    <!-- partial:./partials/_sidebar.html -->
+    {% include 'dashboard/components/sidebar.html' %}
+    <!-- partial -->
+    <div class="container-fluid page-body-wrapper">
+      <!-- partial:./partials/_navbar.html -->
+    {% include 'dashboard/components/topnav.html' %}
+      <!-- partial -->
+      <div class="main-panel">
+        <div class="content-wrapper">
+            <div class="row">
+                <div class="col-lg-12 grid-margin stretch-card">
+                  <div class="card border-1 border-secondary">
+                    <div class="card-header">
+                      <a href="{% url 'GardenDetails' %}">
+                        <button type="button" class="btn btn-primary btn-sm"><i class="mdi mdi-arrow-left"></i> Garden Details</button>
+                      </a>
+                    </div>
+                    <div class="card-body">
+                      <div class="table-responsive">
+                        <table id="example" class="table table-hover table-striped table-bordered">
+                          <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Garden Name</th>
+                                <th>Lot Image</th>
+                                {% if user.is_superuser %}
+                                <Th>Action</Th>
+                                {% endif %}
+                            </tr>
+                          </thead>
+                          <tbody>
+                           {% for data in data %}
+                            <tr>
+                              <td>{{ data.id }}</td>
+                              <td>
+                                <p class="text-success fw-bold fs-6">{{ data.Garden_Name }}</p>
+                              </td>
+                              <td>
+                                {% if data.Lot_Image %}
+                                <img src="{{ data.Lot_Image.url }}" class="img-fluid img-thumbnail" style="border-radius: 5%; min-width: 400px; min-height: 250px;">
+                                {% else %}
+                                <label class="badge bg-danger fs-6">No Image</label>
+                                {% endif %}
+                              </td>
+                              {% if user.is_superuser %}
+                              <td class="text-center">
+                                <a href="{% url 'DeleteGardenImage' data.id %}">
+                                    <button type="button" class="btn btn-outline-danger btn-sm"><i class="mdi mdi-trash-can-outline"></i></button>
+                                </a>
+                              </td>
+                              {% endif %}
+                            </tr>
+                            {% endfor %}
+                          </tbody>
+                        </table>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+        </div>
+        <!-- content-wrapper ends -->
+        <!-- partial:./partials/_footer.html -->
+      {% include 'dashboard/components/footer.html' %}
+        <!-- partial -->
+      </div>
+      <!-- main-panel ends -->
+    </div>
+    <!-- page-body-wrapper ends -->
+  </div>
+  <!-- container-scroller -->
+
+
+<script>
+    $(document).ready(function () {
+    $('#example').DataTable({
+        "lengthMenu": [15, 30, 50, 75, 100],
+        "bStateSave": true,
+        'columnDefs': [
+            {'width': '1%', 'targets': 0},
+            {'width': '20%', 'targets': 1},
+            {'width': '50%', 'targets': 2},
+            {'width': '1%', 'targets': 3},
+        ]
+    });
+    });
+</script>
+{% endblock %}
+

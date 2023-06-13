@@ -1,0 +1,107 @@
+{% load static %}
+<form method="POST" action="{% url 'Register' %}">
+<div class="modal fade" id="registerForm" data-bs-backdrop="static" tabindex="-1" aria-labelledby="#" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content">
+            <div class="body container">
+                <div class="main row">
+                    <div class="left col-12 col-sm-7">
+                        <nav class="navbar bg-light">
+                            <div class="container-fluid">
+                                <a class="navbar-brand" href="" data-bs-dismiss="modal">
+                                    <img src="{% static 'home/assets/test.svg' %}" alt="" width="30" height="30"
+                                        class="d-inline-block align-text-top">
+                                    <span class="fs-6 lead">Surigao Memorial Park</span>
+                                </a>
+                            </div>
+                        </nav>        
+                        <div class="container-fluid me-0 pe-0">
+                            <div class="login body ">
+                                <div class="container">
+                                    <div class="body-main row">
+                                        <div class="body-left col-12">
+                                            <div class="row ">
+                                                <div class="col-12 my-4">
+                                                    <h2 class="fw-light text-center">Register Your SMPI Account</h2>
+                                                </div>       
+                                                <div class="row">
+                                                    <div class="col-12">
+                                                        <div class="container">
+                                                            {% if error %}
+                                                            <div id="errorhead" class="alert alert-danger mb-3" role="alert">{{ error }}</div>
+                                                            {% endif %}
+
+                                                            
+                                                                {% csrf_token %}
+
+                                                                <div class="mb-3 form-floating">
+                                                                    {{register_form.first_name}}
+                                                                    <label for="name" class="form-lable">Full Name</label>
+                                                                    <div id="nameHelp" class="form-text"></div>
+                                                                </div>
+
+                                                                <div class="mb-3 form-floating">
+                                                                    {{register_form.username}}
+                                                                    <label for="name" class="form-lable">Username</label>
+                                                                    <div id="usernameHelp" class="form-text"></div>
+                                                                </div>
+
+                                                                <div class="form-floating mb-3" data-bs-toggle="tooltip" data-bs-placement="left" data-bs-custom-class="custom-tooltip" data-bs-html="true" data-bs-title="
+                                                                
+                                                                <div class='m-2 mt-4'>
+                                                                    <p>Your password can’t be too similar to your other personal information.</p>
+                                                                    <p>Your password must contain at least 8 characters.</p>
+                                                                    <p>Your password can’t be a commonly used password.</p>
+                                                                    <p>Your password can’t be entirely numeric.</p>
+                                                                </div>
+
+                                                                ">
+                                                                    {{register_form.password1}}
+                                                                    <label for="floatingInput">Password</label>   
+                                                                </div>
+                                                                <div class="mb-3 form-floating">
+                                                                    {{register_form.password2}}
+                                                                    <label for="password" class="form-lable">Confirm Password</label>
+                                                                    <div id="passwordHelp" class="form-text">Enter the same password as before, for verification.</div>
+                                                                </div>
+                                                                <div class="d-flex justify-content-center my-5">
+                                                                    <!-- <input type="submit" class="btn btn-success w-75" value="Register"> -->
+                                                                    <button type="button" id="button" class="btn btn-success w-75" data-bs-toggle="modal" data-bs-target="#exampleModal" disabled>Register</button>
+                                                                </div>
+                                              
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="right col-12 col-sm-5 login-background-bg d-flex flex-column justify-content-center">
+                        <div class="row mb-4">
+                            <div class="col-12 text-white">
+                                <p class="fw-bold text-center display-5 mt-3 mt-sm-0">Have an account?</p>
+                                <p class="fw-light text-center fs-5">Log-in and discover what Surigao <br> Memorial Park Inc has to offer! </p>
+                                <div class="d-flex justify-content-center">
+                                    <button type="button" class="btn btn-outline-light" aria-describedby="registerHelp" data-bs-toggle="modal" data-bs-target="#loginForm">Login</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% include 'home/rules.html' %}
+</form>
+<script>
+//    var myModal = new bootstrap.Modal(document.getElementById('registerForm'), {})
+//    myModal.toggle()
+
+   const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]')
+const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl))
+</script>

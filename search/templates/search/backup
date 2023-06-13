@@ -1,0 +1,76 @@
+
+<!-- Small Screen Nav Bar -->
+<div class="d-flex d-sm-flex d-md-flex d-lg-none d-xl-none d-xxl-none mt-2 bg-memorial mt-auto p-2" id="dropdown">
+  <div class="dropdown">
+    <button class="btn btn-custom dropdown-toggle" type="button" id="dropdownCenterBtn" data-bs-toggle="dropdown"
+      aria-expanded="false">Menu</button>
+    {% if user.is_superuser %}
+    <a style="text-decoration: none;" href="{% url 'Admin' %}"><button type="button"
+        class="btn btn-custom text-white text-nowrap" style="text-decoration:none">Admin Panel</button></a>
+    {% endif %}
+    <ul class="dropdown-menu" aria-labelledby="dropdownCenterBtn">
+      {% if user.is_authenticated %}
+      <a href="{% url 'Home' %}" class="dropdown-item" style="text-decoration:none">Home</a>
+      <button type="button" class="btn btn-custom dropdown-item" style="text-decoration:none" data-bs-toggle="modal"
+        data-bs-target="#logout_modal">Logout</button>
+      {% endif %}
+      {% if user.is_authenticated %}
+      <li>
+        <hr class="dropdown-divider">
+      </li>
+      <li><a class="dropdown-item" href="{% url 'Search' %}">Search</a></li>
+      <li><a class="dropdown-item" href="{% url 'Locator' %}">Grave Locator</a></li>
+      <li><a class="dropdown-item" href="{% url 'Procurement' %}">Lot Procurement</a></li>
+      <!-- <li><a class="dropdown-item" href="#">Internment Scheduling</a></li> -->
+      {% endif %}
+    </ul>
+  </div>
+</div>
+<!-- Small Screen Nav End -->
+
+<!-- Normal Nav -->
+<nav class="navbar navbar-expand-lg bg-memorial d-none d-sm-none d-md-none d-lg-block d-xl-block d-xxl-block ps-2">
+  <div class="ms-2"></div>
+  <div class="container-fluid">
+    <a class="navbar-brand text-white fw-bold" href="{% url 'Home' %}">SMP</a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <ul class="navbar-nav">
+        <li class="nav-item">
+          <a class="nav-link active text-white" aria-current="page" href="{% url 'Search' %}">Search</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link text-white" href="{% url 'Locator' %}">Grave Locator</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link text-white" href="{% url 'Procurement' %}">Lot Procurement</a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<!-- Normal Nav End -->
+
+
+<!-- tABLE -->
+<table id="search-table" class="display table-responsive-lg table-responsive-sm nowrap cell-border" width="100%">
+  <thead>
+    <tr class="text-uppercase">
+      <th scope="col">Name</th>
+      <th scope="col">Born</th>
+      <th scope="col">Died</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for data in data %}
+    <tr>
+      <th scope="row">{{ data.name }}</th>
+      <td>{{ data.born }}</td>
+      <td>{{ data.died }}</td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
