@@ -1,0 +1,13 @@
+.git
+.github
+.venv
+venv
+.compose-data
+__pycache__
+*.py[cod]
+.env
+.env.*
+!.env.example
+db.sqlite3*
+staticfiles
+dropbox.txt

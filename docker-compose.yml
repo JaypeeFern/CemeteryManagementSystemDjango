@@ -1,0 +1,30 @@
+# Coolify pulls the immutable image published by .github/workflows/build-images.yml.
+# Configure the bind-mount path and application secrets in Coolify's environment.
+services:
+  web:
+    image: ghcr.io/jaypeefern/cemetery-management-system-django:${SOURCE_COMMIT:?Set SOURCE_COMMIT to the full Git commit SHA}
+    restart: unless-stopped
+    expose:
+      - "8000"
+    environment:
+      DJANGO_SECRET_KEY: ${DJANGO_SECRET_KEY:?Set DJANGO_SECRET_KEY in Coolify}
+      DJANGO_DEBUG: ${DJANGO_DEBUG:-false}
+      DJANGO_ALLOWED_HOSTS: ${DJANGO_ALLOWED_HOSTS:?Set DJANGO_ALLOWED_HOSTS to the public host name}
+      DJANGO_CSRF_TRUSTED_ORIGINS: ${DJANGO_CSRF_TRUSTED_ORIGINS:?Set DJANGO_CSRF_TRUSTED_ORIGINS to the public HTTPS origin}
+      GOOGLE_RECAPTCHA_SECRET_KEY: ${GOOGLE_RECAPTCHA_SECRET_KEY:?Set GOOGLE_RECAPTCHA_SECRET_KEY in Coolify}
+      GOOGLE_RECAPTCHA_SITE_KEY: ${GOOGLE_RECAPTCHA_SITE_KEY:?Set GOOGLE_RECAPTCHA_SITE_KEY in Coolify}
+      SQLITE_PATH: /data/db.sqlite3
+      MEDIA_ROOT: /data/media
+    volumes:
+      - ${APP_DATA_PATH:-/data/coolify/persistent/cemetery-management}:/data
+    healthcheck:
+      test:
+        - CMD
+        - python
+        - -c
+        - "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8000/admin/login/', timeout=3)"
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 30s
+    stop_grace_period: 30s

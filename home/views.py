@@ -12,7 +12,8 @@ def index(request):
     register_form = RegistrationForm(request.POST)
     context = {
         'login_form': login_form,
-        'register_form': register_form
+        'register_form': register_form,
+        'recaptcha_site_key': settings.GOOGLE_RECAPTCHA_SITE_KEY,
     }
     
     return render(request, "home/index.html", context)

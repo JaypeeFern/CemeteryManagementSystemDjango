@@ -1,3 +1,7 @@
 home/templates/home/backup
 staticfiles/
+.compose-data/
+.env
+.env.*
+!.env.example
 dropbox.txt

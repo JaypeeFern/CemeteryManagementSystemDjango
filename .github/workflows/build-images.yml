@@ -1,0 +1,138 @@
+name: Build and deploy Docker image
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '**.py'
+      - '**.html'
+      - '**.css'
+      - '**.js'
+      - '**.txt'
+      - 'Dockerfile'
+      - '.dockerignore'
+      - 'docker/**'
+      - 'docker-compose*.yml'
+      - '.github/workflows/build-images.yml'
+  workflow_dispatch:
+
+concurrency:
+  group: cemetery-image-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+  packages: write
+
+env:
+  IMAGE_TAG: ${{ github.sha }}
+  IMAGE_NAME: ghcr.io/jaypeefern/cemetery-management-system-django
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: docker/setup-buildx-action@v3
+      - uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      - name: Check the image tag
+        run: |
+          if [[ ! "$IMAGE_TAG" =~ ^[0-9a-f]{40}$ ]]; then
+            echo "Expected a full lowercase 40-character Git SHA." >&2
+            exit 1
+          fi
+      - id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: ${{ env.IMAGE_NAME }}
+          tags: |
+            type=raw,value=${{ github.sha }}
+            type=raw,value=latest,enable={{is_default_branch}}
+      - uses: docker/build-push-action@v6
+        with:
+          context: .
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+  verify-image:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: docker/setup-buildx-action@v3
+      - uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      - name: Verify immutable image exists in GHCR
+        env:
+          IMAGE_REFERENCE: ghcr.io/jaypeefern/cemetery-management-system-django:${{ github.sha }}
+        run: docker buildx imagetools inspect "$IMAGE_REFERENCE"
+
+  deploy:
+    needs: verify-image
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Pin Coolify to this commit and trigger deployment
+        env:
+          URL: ${{ secrets.COOLIFY_WEBHOOK_URL }}
+          WEBHOOK_TOKEN: ${{ secrets.COOLIFY_TOKEN }}
+          API_TOKEN: ${{ secrets.COOLIFY_API_TOKEN }}
+        run: |
+          set -euo pipefail
+
+          if [ -z "$URL" ] && [ -z "$WEBHOOK_TOKEN" ] && [ -z "$API_TOKEN" ]; then
+            echo "Coolify secrets are not configured; skipping automatic deployment."
+            exit 0
+          fi
+          if [ -z "$URL" ] || [ -z "$WEBHOOK_TOKEN" ] || [ -z "$API_TOKEN" ]; then
+            echo "Set COOLIFY_WEBHOOK_URL, COOLIFY_TOKEN, and COOLIFY_API_TOKEN together." >&2
+            exit 1
+          fi
+
+          parsed=$(python3 - "$URL" <<'PY'
+          from urllib.parse import parse_qs, urlparse
+          import re
+          import sys
+
+          webhook = urlparse(sys.argv[1])
+          if webhook.scheme != "https" or not webhook.hostname or webhook.username or webhook.password:
+              raise SystemExit("COOLIFY_WEBHOOK_URL must be an HTTPS URL without embedded credentials")
+          if webhook.path.rstrip("/") != "/api/v1/deploy":
+              raise SystemExit("COOLIFY_WEBHOOK_URL must use the resource deploy endpoint")
+          values = parse_qs(webhook.query).get("uuid", [])
+          if len(values) != 1 or not re.fullmatch(r"[A-Za-z0-9][A-Za-z0-9_-]*", values[0]):
+              raise SystemExit("COOLIFY_WEBHOOK_URL must contain one valid uuid query parameter")
+          print(f"{webhook.scheme}://{webhook.netloc}")
+          print(values[0])
+          PY
+          )
+          mapfile -t values <<< "$parsed"
+          if [ "${#values[@]}" -ne 2 ]; then
+            echo "Could not derive the Coolify origin and application UUID." >&2
+            exit 1
+          fi
+
+          api_root="${values[0]}/api/v1"
+          application_uuid="${values[1]}"
+          curl --fail-with-body --silent --show-error --output /dev/null --request PATCH \
+            "$api_root/applications/$application_uuid" \
+            -H "Authorization: Bearer $API_TOKEN" \
+            -H "Content-Type: application/json" \
+            --data "$(jq -n --arg sha "$IMAGE_TAG" '{git_commit_sha: $sha}')"
+
+          state=$(curl --fail-with-body --silent --show-error \
+            -H "Authorization: Bearer $API_TOKEN" \
+            "$api_root/applications/$application_uuid")
+          jq -e --arg sha "$IMAGE_TAG" '.git_commit_sha == $sha' <<< "$state" >/dev/null
+
+          curl --fail-with-body --silent --show-error --output /dev/null --request POST \
+            -H "Authorization: Bearer $WEBHOOK_TOKEN" "$URL"

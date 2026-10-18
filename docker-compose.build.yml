@@ -1,0 +1,9 @@
+# Local source-build override. Production Coolify reads docker-compose.yml and
+# pulls the GHCR image; CI builds this same Dockerfile and publishes it.
+services:
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "127.0.0.1:${APP_PORT:-8000}:8000"
