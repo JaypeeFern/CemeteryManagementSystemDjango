@@ -1,4 +1,4 @@
-<form action="POST" method="post">
+<form action="{% url 'customerForm' %}" method="post">
     {% csrf_token %}
 
     <div class="col-12 input-group mb-3">

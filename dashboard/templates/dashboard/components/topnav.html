@@ -42,9 +42,12 @@
             <i class="mdi mdi-settings text-primary"></i>
             Settings
           </a> -->
-          <a href="{% url 'Logout' %}" class="dropdown-item">
+          <form method="post" action="{% url 'Logout' %}">
+            {% csrf_token %}
+            <button type="submit" class="dropdown-item">
               <i class="mdi mdi-logout text-memorial"></i>Logout
-          </a>
+            </button>
+          </form>
         </div>
       </li>
     </ul>

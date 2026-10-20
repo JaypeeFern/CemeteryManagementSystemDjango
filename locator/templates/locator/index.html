@@ -43,7 +43,7 @@
                 <div class="d-flex animate__animated animate__fadeInUp" id="test">
                   <div class="flex-shrink-0">
                     {% if data.graveimage %}
-                    <img class="" src="{{data.graveimage.url}}" width="105px" height="90px" style="border-radius: 5px;">
+                    <img class="" src="{% url 'PrivateGraveImageForRecord' data.pk %}" width="105px" height="90px" style="border-radius: 5px;">
                     {% else %}
                     <div class="">
                       <img class="" src="https://en.thevalue.com/assets/not_available_icon-62ff1c150baaf1f6c92ec5edf36e4481526801d3a687c8755999b55d80fc94c1.jpg" width="105px" height="90px" style="border-radius: 5px;">
@@ -94,7 +94,7 @@
               </div>
               <div class="col-12 col-md-6 d-flex">
                 {% if data.graveimage %}
-                    <img id="zoomable" class="p-2 mt-auto mb-auto me-auto ms-auto overflow-auto" style="border-radius: 1rem; min-height: 292px; max-height: 292px;" src="{{data.graveimage.url}}">
+                    <img id="zoomable" class="p-2 mt-auto mb-auto me-auto ms-auto overflow-auto" style="border-radius: 1rem; min-height: 292px; max-height: 292px;" src="{% url 'PrivateGraveImageForRecord' data.pk %}">
                 {% else %}
                 <div class="p-2 d-flex">
                     <img class="img-fluid w-50 m-auto" style="border-radius: 1rem;" src="https://st4.depositphotos.com/14953852/22772/v/600/depositphotos_227725020-stock-illustration-image-available-icon-flat-vector.jpg" alt="Headstone Image Not Available.">

@@ -7,10 +7,18 @@ class CustomerForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super(CustomerForm, self).__init__(*args, **kwargs)
         self.fields['chosen_Lot'].queryset = GardenDetail.objects.filter(Available_Space__gte=1)
+
+    def clean(self):
+        cleaned_data = super().clean()
+        chosen_lot = cleaned_data.get('chosen_Lot')
+        chosen_lot_type = cleaned_data.get('chosen_Lot_Type')
+        if chosen_lot and chosen_lot_type and not chosen_lot.Lot_Type.filter(pk=chosen_lot_type.pk).exists():
+            self.add_error('chosen_Lot_Type', 'Choose a lot type available for the selected garden.')
+        return cleaned_data
         
     class Meta:
         model = Customer
-        fields = ('submitted_by', 'first_Name', 'last_Name', 'contact_Number', 'deceased_Name', 'born_Date', 'died_Date', 'burial_Schedule', 'chosen_Lot', 'chosen_Lot_Type')
+        fields = ('first_Name', 'last_Name', 'contact_Number', 'deceased_Name', 'born_Date', 'died_Date', 'burial_Schedule', 'chosen_Lot', 'chosen_Lot_Type')
         widgets = {
             'first_Name': forms.TextInput(attrs={'type': 'text', 'class': 'form-control', 'id': 'floatingName', 'placeholder': '#'}),
             'last_Name': forms.TextInput(attrs={'type': 'text', 'class': 'form-control', 'id': 'floatinglastName', 'placeholder': '#'}),

@@ -2,6 +2,7 @@ from enum import auto
 from django.db import models
 import secrets
 import string
+from .storage import PrivateGraveImageStorage
 
 # Create your models here.
 
@@ -38,7 +39,12 @@ class DeceasedInformation(models.Model):
     born = models.DateField(blank=True)
     died = models.DateField(blank=True)
     location = models.ForeignKey(Location, on_delete=models.CASCADE, related_name="gravelocation")
-    graveimage = models.ImageField(null=True, blank=True, upload_to="Images/")
+    graveimage = models.ImageField(
+        null=True,
+        blank=True,
+        upload_to="Images/",
+        storage=PrivateGraveImageStorage(),
+    )
      
     def get_grave_lot_id(self):
         return f"{self.location.grave_lot_id}"

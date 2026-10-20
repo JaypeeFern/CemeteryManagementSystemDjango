@@ -2,8 +2,13 @@
 # pulls the GHCR image; CI builds this same Dockerfile and publishes it.
 services:
   web:
+    image: cemetery-management-system-django:local
+    environment:
+      DJANGO_DEBUG: ${DJANGO_DEBUG:-true}
     build:
       context: .
       dockerfile: Dockerfile
+      args:
+        SOURCE_COMMIT: ${SOURCE_COMMIT:?Set SOURCE_COMMIT in the local environment}
     ports:
       - "127.0.0.1:${APP_PORT:-8000}:8000"

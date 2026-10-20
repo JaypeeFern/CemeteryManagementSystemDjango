@@ -158,11 +158,12 @@
             <div class="modal-body">
                 <div class="fs-6">Are you sure you want to sign out?</div>
 
-                <a style="text-decoration: none;" href="{% url 'Logout' %}">
-                    <div class="mt-2 d-grid gap-2 col-6 mx-auto">
-                        <input type="submit" class="btn btn-success" href="" value="Proceed">
-                    </div>
-                </a>
+                <form method="post" action="{% url 'Logout' %}">
+                  {% csrf_token %}
+                  <div class="mt-2 d-grid gap-2 col-6 mx-auto">
+                    <button type="submit" class="btn btn-success">Proceed</button>
+                  </div>
+                </form>
 
                 <div class="mt-2 d-grid gap-2 col-6 mx-auto">
                     <input type="submit" class="btn btn-outline-success" data-bs-dismiss="modal" value="Cancel">

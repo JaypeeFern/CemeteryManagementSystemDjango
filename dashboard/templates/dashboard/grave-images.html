@@ -38,7 +38,7 @@
                               <td class="text-success fw-bold fs-6">{{ data.name }}</td>
                               <td>
                                 {% if data.graveimage %}
-                                <img src="{{ data.graveimage.url }}" class="img-fluid img-thumbnail" style="border-radius: 5%; min-width: 400px; min-height: 250px;">
+                                <img src="{% url 'PrivateGraveImageForRecord' data.pk %}" class="img-fluid img-thumbnail" style="border-radius: 5%; min-width: 400px; min-height: 250px;">
                                 {% else %}
                                 <p class="badge bg-danger fw-bold fs-6">Image Not Available</p>
                                 {% endif %}
@@ -48,9 +48,10 @@
                                   <i class="mdi mdi-square-edit-outline"></i>
                                 </button>
                                 {% if user.is_superuser %}
-                                <a href="{% url 'DeleteImage' data.id %}">
-                                  <button type="button" class="btn btn-outline-danger btn-sm"><i class="mdi mdi-trash-can-outline"></i></button>
-                                </a>
+                                <form method="post" action="{% url 'DeleteImage' data.id %}">
+                                  {% csrf_token %}
+                                  <button type="submit" class="btn btn-outline-danger btn-sm"><i class="mdi mdi-trash-can-outline"></i></button>
+                                </form>
                                 {% endif %}
                               </td>
                             </tr>

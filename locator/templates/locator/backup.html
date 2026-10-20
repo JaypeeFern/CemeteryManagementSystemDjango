@@ -1,3 +1,4 @@
+{% load static %}
 <div class="container-fluid mt-3 mb-2 pb-3 ">
     <div class="card bg-light">
       <div class="card-header bg-memorial border-0">
@@ -51,12 +52,12 @@
         <div class="col-xl-4 col-md-12">
           {% if data.graveimage %}
           <div class="p-2 mb-md-4">
-              <img class="img-fluid img-responsive d-sm-block w-auto m-auto" style="border-radius: 1rem;" src="{{data.graveimage.url}}" alt="Headstone Image Not Available.">
+              <img class="img-fluid img-responsive d-sm-block w-auto m-auto" style="border-radius: 1rem;" src="{% url 'PrivateGraveImageForRecord' data.pk %}" alt="Headstone Image Not Available.">
               <button type="button" class="btn btn-outline-success mt-4 d-block m-auto col-6" data-bs-toggle="modal" data-bs-target="#map-Modal" >Open Map</button>
           </div>
           {% else %}
           <div class="p-2">
-              <img class="img-fluid img-responsive d-sm-block w-50" style="border-radius: 1rem;" src="#" alt="Headstone Image Not Available.">
+              <img class="img-fluid img-responsive d-sm-block w-50" style="border-radius: 1rem;" src="{% static 'home/assets/image-not-found.png' %}" alt="Headstone Image Not Available.">
               <button type="button" class="btn btn-outline-success mt-4 d-block m-auto col-6" data-bs-toggle="modal" data-bs-target="#map-Modal" >Open Map</button>
           </div>
           {% endif %}
@@ -123,12 +124,12 @@
               <div class="col-6">
                 {% if data.graveimage %}
                 <div class="p-2 mb-md-4">
-                    <img class="img-fluid img-responsive d-sm-block w-auto m-auto" style="border-radius: 1rem;" src="{{data.graveimage.url}}" alt="Headstone Image Not Available.">
+                    <img class="img-fluid img-responsive d-sm-block w-auto m-auto" style="border-radius: 1rem;" src="{% url 'PrivateGraveImageForRecord' data.pk %}" alt="Headstone Image Not Available.">
                     <button type="button" class="btn btn-outline-success mt-4 d-block m-auto col-6" data-bs-toggle="modal" data-bs-target="#map-Modal" >Open Map</button>
                 </div>
                 {% else %}
                 <div class="p-2">
-                    <img class="img-fluid img-responsive d-sm-block w-50" style="border-radius: 1rem;" src="#" alt="Headstone Image Not Available.">
+                    <img class="img-fluid img-responsive d-sm-block w-50" style="border-radius: 1rem;" src="{% static 'home/assets/image-not-found.png' %}" alt="Headstone Image Not Available.">
                     <button type="button" class="btn btn-outline-success mt-4 d-block m-auto col-6" data-bs-toggle="modal" data-bs-target="#map-Modal" >Open Map</button>
                 </div>
                 {% endif %}
@@ -163,7 +164,7 @@
     <div class="row">
       <div class="col-1 {% if data.graveimage == '' %}bg-secondary opacity-25{% endif %}">
           {% if data.graveimage %}
-          <img class="" src="{{data.graveimage.url}}" width="80px" height="60px" style="border-radius: 5px;">
+          <img class="" src="{% url 'PrivateGraveImageForRecord' data.pk %}" width="80px" height="60px" style="border-radius: 5px;">
           {% endif %}
       </div>
       <div class="col-9">

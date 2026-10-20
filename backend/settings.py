@@ -9,13 +9,13 @@ https://docs.djangoproject.com/en/4.0/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.0/ref/settings/
 """
-from django.core.management.utils import get_random_secret_key
 
 from pathlib import Path
+from datetime import timedelta
 import os
+from django.core.management.utils import get_random_secret_key
 import django_heroku
 import dj_database_url
-import dropbox
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -60,10 +60,12 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'axes',
     'django_cleanup.apps.CleanupConfig',
 ]
 
 MIDDLEWARE = [
+    'dashboard.middleware.UploadSizeLimitMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -71,6 +73,7 @@ MIDDLEWARE = [
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
+    'axes.middleware.AxesMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
@@ -125,6 +128,23 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+AUTHENTICATION_BACKENDS = [
+    'axes.backends.AxesStandaloneBackend',
+    'django.contrib.auth.backends.ModelBackend',
+]
+
+AXES_FAILURE_LIMIT = 5
+AXES_COOLOFF_TIME = timedelta(hours=1)
+AXES_LOCKOUT_PARAMETERS = [['username', 'ip_address']]
+AXES_IPWARE_PROXY_COUNT = int(os.environ.get('AXES_IPWARE_PROXY_COUNT', '0'))
+if AXES_IPWARE_PROXY_COUNT < 0:
+    raise RuntimeError('AXES_IPWARE_PROXY_COUNT cannot be negative.')
+AXES_IPWARE_META_PRECEDENCE_ORDER = (
+    ('HTTP_X_FORWARDED_FOR', 'REMOTE_ADDR')
+    if AXES_IPWARE_PROXY_COUNT > 0
+    else ('REMOTE_ADDR',)
+)
+
 
 # Internationalization
 # https://docs.djangoproject.com/en/4.0/topics/i18n/
@@ -141,15 +161,44 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.0/howto/static-files/
 
-MEDIA_URL = 'media/'
+MEDIA_URL = '/media/'
 MEDIA_ROOT = os.environ.get('MEDIA_ROOT', os.path.join(BASE_DIR, 'media'))
+_media_root_path = Path(MEDIA_ROOT).resolve()
+_private_media_default = _media_root_path.parent / f'{_media_root_path.name}-private'
+PRIVATE_MEDIA_ROOT = os.environ.get('PRIVATE_MEDIA_ROOT', str(_private_media_default))
+_private_media_root_path = Path(PRIVATE_MEDIA_ROOT).resolve()
+if (
+    _private_media_root_path == _media_root_path
+    or _private_media_root_path in _media_root_path.parents
+    or _media_root_path in _private_media_root_path.parents
+):
+    raise RuntimeError('PRIVATE_MEDIA_ROOT must be separate from MEDIA_ROOT.')
+
+# Application upload endpoints accept at most one file per request.
+DATA_UPLOAD_MAX_NUMBER_FILES = 1
+FILE_UPLOAD_HANDLERS = [
+    'dashboard.upload_handlers.UploadSizeLimitHandler',
+    'django.core.files.uploadhandler.MemoryFileUploadHandler',
+    'django.core.files.uploadhandler.TemporaryFileUploadHandler',
+]
 
 STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
-STATICFILES_STORAGE = 'whitenoise.storage.CompressedStaticFilesStorage'
+STORAGES = {
+    'default': {
+        'BACKEND': 'django.core.files.storage.FileSystemStorage',
+    },
+    'staticfiles': {
+        'BACKEND': 'whitenoise.storage.CompressedStaticFilesStorage',
+    },
+}
 
 if not DEBUG:
     SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+    SECURE_SSL_REDIRECT = True
+    SECURE_HSTS_SECONDS = 31536000
+    SECURE_CONTENT_TYPE_NOSNIFF = True
+    SECURE_REFERRER_POLICY = 'same-origin'
     SESSION_COOKIE_SECURE = True
     CSRF_COOKIE_SECURE = True
 
@@ -160,15 +209,10 @@ if not DEBUG:
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-CORS_ORIGIN_WHITELIST = [
-    'http://localhost:3000',
-]
-
 CORS_ALLOWED_ORIGINS = [
-    'https://www.smpi.online',
-    'https://smpi.online',
-    'http://www.smpi.online',
-    'http://smpi.online'
+    origin.strip()
+    for origin in os.environ.get('DJANGO_CORS_ALLOWED_ORIGINS', '').split(',')
+    if origin.strip()
 ]
 
 CSRF_TRUSTED_ORIGINS = [
@@ -181,8 +225,7 @@ CSRF_TRUSTED_ORIGINS = [
 
 SWEETIFY_SWEETALERT_LIBRARY = 'sweetalert2'
 
-X_FRAME_OPTIONS = "SAMEORIGIN"
-SILENCED_SYSTEM_CHECKS = ["security.W019"]
+X_FRAME_OPTIONS = "DENY"
 
 # ADMINS = [('Paul', 'jfernandez1@ssct.edu.ph'),]
 
@@ -197,9 +240,6 @@ SILENCED_SYSTEM_CHECKS = ["security.W019"]
 # EMAIL_HOST_USER = ''
 
 # EMAIL_HOST_PASSWORD = ''
-
-# ---------------------------------- Dropbox --------------------------------- #
-
 
 # ---------------------------------- Google ---------------------------------- #
 

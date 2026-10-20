@@ -49,9 +49,10 @@
                               </td>
                               {% if user.is_superuser %}
                               <td class="text-center">
-                                <a href="{% url 'DeleteGardenImage' data.id %}">
-                                    <button type="button" class="btn btn-outline-danger btn-sm"><i class="mdi mdi-trash-can-outline"></i></button>
-                                </a>
+                                <form method="post" action="{% url 'DeleteGardenImage' data.id %}">
+                                  {% csrf_token %}
+                                  <button type="submit" class="btn btn-outline-danger btn-sm"><i class="mdi mdi-trash-can-outline"></i></button>
+                                </form>
                               </td>
                               {% endif %}
                             </tr>

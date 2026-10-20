@@ -80,7 +80,10 @@
                 <hr class="border-memorial border border-2 m-0 my-2 p-0">
             </li>
             <li class="nav-item">
-                <a class="nav-link mdi mdi-logout mdi-24px fs-5" href="{% url 'Logout' %}"> Logout</a>
+                <form method="post" action="{% url 'Logout' %}">
+                  {% csrf_token %}
+                  <button class="nav-link mdi mdi-logout mdi-24px fs-5 border-0 bg-transparent" type="submit"> Logout</button>
+                </form>
             </li>
             {% else %}
             <li class="nav-item">
@@ -143,9 +146,19 @@
                                 <li><hr class="dropdown-divider"></li>
                                 <!-- <li><a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#exampleModal">Development: None</a></li> -->
                                 <!-- <li><hr class="dropdown-divider"></li> -->
-                                <li class=""><a class="dropdown-item" href="{% url 'Logout' %}">Logout</a></li>
+                                <li class="">
+                                  <form method="post" action="{% url 'Logout' %}">
+                                    {% csrf_token %}
+                                    <button class="dropdown-item" type="submit">Logout</button>
+                                  </form>
+                                </li>
                                 {% else %}
-                                <li class=""><a class="dropdown-item" href="{% url 'Logout' %}">Logout</a></li>
+                                <li class="">
+                                  <form method="post" action="{% url 'Logout' %}">
+                                    {% csrf_token %}
+                                    <button class="dropdown-item" type="submit">Logout</button>
+                                  </form>
+                                </li>
                                 {% endif %}
                               </ul>
                           </div>
@@ -179,4 +192,3 @@
         </nav>
     </div>
 </div>
-  

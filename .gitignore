@@ -1,7 +1,12 @@
 home/templates/home/backup
 staticfiles/
 .compose-data/
+.compose-data-*/
+/media/
 .env
 .env.*
 !.env.example
+__pycache__/
+*.py[cod]
+db.sqlite3*
 dropbox.txt

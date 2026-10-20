@@ -1,18 +1,21 @@
-# Coolify pulls the immutable image published by .github/workflows/build-images.yml.
+# Production IMAGE_REFERENCE is set to the verified GHCR digest by the build workflow.
 # Configure the bind-mount path and application secrets in Coolify's environment.
 services:
   web:
-    image: ghcr.io/jaypeefern/cemetery-management-system-django:${SOURCE_COMMIT:?Set SOURCE_COMMIT to the full Git commit SHA}
+    image: ${IMAGE_REFERENCE:?Set IMAGE_REFERENCE to the approved image reference}
     restart: unless-stopped
     expose:
       - "8000"
     environment:
+      SOURCE_COMMIT: ${SOURCE_COMMIT:?Coolify must select the source commit matching the image}
       DJANGO_SECRET_KEY: ${DJANGO_SECRET_KEY:?Set DJANGO_SECRET_KEY in Coolify}
-      DJANGO_DEBUG: ${DJANGO_DEBUG:-false}
+      DJANGO_DEBUG: "false"
       DJANGO_ALLOWED_HOSTS: ${DJANGO_ALLOWED_HOSTS:?Set DJANGO_ALLOWED_HOSTS to the public host name}
       DJANGO_CSRF_TRUSTED_ORIGINS: ${DJANGO_CSRF_TRUSTED_ORIGINS:?Set DJANGO_CSRF_TRUSTED_ORIGINS to the public HTTPS origin}
+      DJANGO_CORS_ALLOWED_ORIGINS: ${DJANGO_CORS_ALLOWED_ORIGINS:-}
       GOOGLE_RECAPTCHA_SECRET_KEY: ${GOOGLE_RECAPTCHA_SECRET_KEY:?Set GOOGLE_RECAPTCHA_SECRET_KEY in Coolify}
       GOOGLE_RECAPTCHA_SITE_KEY: ${GOOGLE_RECAPTCHA_SITE_KEY:?Set GOOGLE_RECAPTCHA_SITE_KEY in Coolify}
+      AXES_IPWARE_PROXY_COUNT: ${AXES_IPWARE_PROXY_COUNT:?Set AXES_IPWARE_PROXY_COUNT to the verified trusted proxy count}
       SQLITE_PATH: /data/db.sqlite3
       MEDIA_ROOT: /data/media
     volumes:
@@ -22,7 +25,7 @@ services:
         - CMD
         - python
         - -c
-        - "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8000/admin/login/', timeout=3)"
+        - "import urllib.request; urllib.request.urlopen(urllib.request.Request('http://127.0.0.1:8000/admin/login/', headers={'X-Forwarded-Proto': 'https'}), timeout=3)"
       interval: 30s
       timeout: 5s
       retries: 3

@@ -17,7 +17,8 @@
         </div>
         <div class="form-group mb-3">
             <label for="">Password</label>
-            <input type="password" name="new_password" class="form-control">
+            {{ form.new_password }}
+            {{ form.new_password.errors }}
             <div class="form-text">Leave this blank if you dont want to change the password.</div>
         </div>
         <div class="form-row field-is_active">

@@ -1,4 +1,24 @@
 import sweetify
+from django.contrib.auth.decorators import user_passes_test
+from django.contrib.auth.mixins import UserPassesTestMixin
+
+
+staff_required = user_passes_test(lambda user: user.is_staff, login_url='Home')
+superuser_required = user_passes_test(lambda user: user.is_superuser, login_url='Home')
+
+
+class StaffRequiredMixin(UserPassesTestMixin):
+    login_url = 'Home'
+
+    def test_func(self):
+        return self.request.user.is_staff
+
+
+class SuperuserRequiredMixin(UserPassesTestMixin):
+    login_url = 'Home'
+
+    def test_func(self):
+        return self.request.user.is_superuser
 
 class SweetifyMixin(object):
     """

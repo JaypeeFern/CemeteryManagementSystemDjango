@@ -1,6 +1,6 @@
 # Build pinned application dependencies once, then keep compilers out of the
 # image that Coolify runs.
-FROM python:3.10-slim-bookworm AS dependencies
+FROM python:3.13-slim-bookworm@sha256:a1165e272e578941b84abc79e4ab38a0305cd12803a5c4247979ac7655f4d641 AS dependencies
 
 WORKDIR /build
 RUN apt-get update \
@@ -10,12 +10,16 @@ RUN apt-get update \
 COPY requirements.txt ./requirements.txt
 RUN python -m pip wheel --wheel-dir=/wheels -r requirements.txt
 
-FROM python:3.10-slim-bookworm AS runtime
+FROM python:3.13-slim-bookworm@sha256:a1165e272e578941b84abc79e4ab38a0305cd12803a5c4247979ac7655f4d641 AS runtime
+
+ARG SOURCE_COMMIT
+RUN test -n "$SOURCE_COMMIT"
 
 ENV PYTHONDONTWRITEBYTECODE=1 \
     PYTHONUNBUFFERED=1 \
     SQLITE_PATH=/data/db.sqlite3 \
-    MEDIA_ROOT=/data/media
+    MEDIA_ROOT=/data/media \
+    CEMETERY_IMAGE_COMMIT=$SOURCE_COMMIT
 
 RUN apt-get update \
     && apt-get install --no-install-recommends -y gosu libpq5 \

@@ -37,7 +37,12 @@
                               <li><hr class="dropdown-divider"></li>
                               <!-- <li><a class="dropdown-item" href="">Development: None</a></li> -->
                               <!-- <li><hr class="dropdown-divider"></li> -->
-                              <li class=""><a class="dropdown-item" href="{% url 'Logout' %}">Logout</a></li>
+                              <li class="">
+                                <form method="post" action="{% url 'Logout' %}">
+                                  {% csrf_token %}
+                                  <button class="dropdown-item" type="submit">Logout</button>
+                                </form>
+                              </li>
                             </ul>
                         </div>
                   </li>

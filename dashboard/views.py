@@ -1,17 +1,23 @@
 
 from bootstrap_modal_forms.generic import BSModalCreateView, BSModalUpdateView, BSModalDeleteView
-from bootstrap_modal_forms.utils import is_ajax
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse_lazy
 from django.contrib.auth.models import User
 from django.db.models import Q, Count
-from django.http import JsonResponse
+from django.http import HttpResponse, HttpResponseBadRequest, JsonResponse
+from django.views.decorators.http import require_POST
 from django.template.loader import render_to_string
 from search.models import DeceasedInformation, Location
 from procurement.models import GardenDetail, Customer, LotType
 from .forms import *
-from django.contrib.auth.decorators import user_passes_test
-from .mixins import *
+from .mixins import (
+    StaffRequiredMixin,
+    SuperuserRequiredMixin,
+    SweetifyMixin,
+    staff_required,
+    superuser_required,
+)
+from .upload_validation import MAX_UPLOAD_SIZE_BYTES, UPLOAD_SIZE_ERROR_MESSAGE
 import sweetify
 from django.core.files.storage import FileSystemStorage
 import pandas as pd
@@ -20,6 +26,10 @@ from .resources import DeceasedInformationResource
 from datetime import datetime   
 
 # Create your views here.
+
+def _is_ajax(request):
+    return request.headers.get('x-requested-with') == 'XMLHttpRequest'
+
 
 # ---------------------------------------------------------------------------- #
 #                   Bootstrap Ajax Model Not Class Based View                  #
@@ -38,7 +48,7 @@ from datetime import datetime
 #     if request.method == "POST":
 #         form = DeceasedInfoForm(request.POST, request=request)
 #         if form.is_valid():
-#             if not is_ajax(request.META):
+#             if not _is_ajax(request):
 #                 form.save()
 #                 TOAST_SUCCESS(request,'Data Succesfully Added')
 #                 return redirect("Dash_Search")
@@ -85,7 +95,7 @@ def SWEETIFY_ICON_SUCCESS():
 #                                   Dashboard                                  #
 # ---------------------------------------------------------------------------- #
 
-@user_passes_test(lambda u: u.is_staff, login_url='Home')
+@staff_required
 def DisplayDashboard(request):
     
     sales_day = Customer.objects.filter(Q(status=True) & Q(date_created__day=datetime.now().day)).values('chosen_Lot__Garden_Name__grave_area').annotate(lot_chosen=Count('chosen_Lot'))
@@ -125,6 +135,7 @@ def DisplayDashboard(request):
     
     return render(request, "dashboard/index.html", context)
 
+@staff_required
 def filterMonth(request):
 
     # Create If else for form by using the request.method
@@ -170,6 +181,7 @@ def filterMonth(request):
     
     return render(request, "dashboard/index.html", context)
 
+@staff_required
 def filterYear(request):
 
     # Create If else for form by using the request.method
@@ -220,13 +232,13 @@ def filterYear(request):
 #                                 Deceased Data                                #
 # ---------------------------------------------------------------------------- #
 
-@user_passes_test(lambda u: u.is_staff, login_url='Home')
+@staff_required
 def renderSearch(request):
     return render(request, 'dashboard/deceased-data.html',{
         'data': DeceasedInformation.objects.all()
     })
 
-class addDeceasedInformation(SweetifyMixin, BSModalCreateView):
+class addDeceasedInformation(StaffRequiredMixin, SweetifyMixin, BSModalCreateView):
     model = DeceasedInformation
     template_name = 'dashboard/modals/add-deceased.html'
     form_class = DeceasedInfoForm
@@ -234,7 +246,7 @@ class addDeceasedInformation(SweetifyMixin, BSModalCreateView):
     sweetify_options = SWEETIFY_ICON_SUCCESS()
     success_url = reverse_lazy('Dash_Search')
     
-class updateDeceasedInformation(SweetifyMixin, BSModalUpdateView):
+class updateDeceasedInformation(StaffRequiredMixin, SweetifyMixin, BSModalUpdateView):
     model = DeceasedInformation
     template_name = 'dashboard/modals/update-deceased.html'
     form_class = DeceasedInfoForm
@@ -247,7 +259,7 @@ class updateDeceasedInformation(SweetifyMixin, BSModalUpdateView):
         context['data'] = DeceasedInformation.objects.get(pk=self.kwargs['pk'])
         return context
            
-class deleteDeceasedInformation(SweetifyMixin, BSModalDeleteView):
+class deleteDeceasedInformation(SuperuserRequiredMixin, SweetifyMixin, BSModalDeleteView):
     model = DeceasedInformation
     template_name = 'dashboard/modals/delete-deceased.html'
     success_message = DELETED_MESSAGE('Data')
@@ -259,16 +271,23 @@ class deleteDeceasedInformation(SweetifyMixin, BSModalDeleteView):
         context['data'] = DeceasedInformation.objects.get(pk=self.kwargs['pk'])
         return context
     
+@superuser_required
+@require_POST
 def importCSV(request):
-    if request.method == 'POST':
-        deceased = DeceasedInformationResource()
-        dataset = Dataset()
-        new_deceased = request.FILES['csv_file']
-        data_import = dataset.load(new_deceased.read())
-        result = DeceasedInformationResource().import_data(dataset, dry_run=True)
-        if not result.has_errors():
-            deceased.import_data(dataset, dry_run=False)
-            return redirect('Dash_Search')
+    csv_file = request.FILES.get('csv_file')
+    if not csv_file:
+        return HttpResponseBadRequest('A CSV file is required.')
+    if csv_file.size > MAX_UPLOAD_SIZE_BYTES:
+        return HttpResponse(UPLOAD_SIZE_ERROR_MESSAGE, status=413)
+
+    deceased = DeceasedInformationResource()
+    dataset = Dataset()
+    dataset.load(csv_file.read())
+    result = deceased.import_data(dataset, dry_run=True)
+    if not result.has_errors():
+        deceased.import_data(dataset, dry_run=False)
+        return redirect('Dash_Search')
+    return redirect('Dash_Search')
  
 # ------------------------------------ End ----------------------------------- #
 
@@ -276,14 +295,14 @@ def importCSV(request):
 #                                 Grave Images                                 #
 # ---------------------------------------------------------------------------- #
 
-@user_passes_test(lambda u: u.is_staff, login_url='Home')
+@staff_required
 def renderGraveImages(request):
     
     return render(request, 'dashboard/grave-images.html', {
         'data': DeceasedInformation.objects.all()
     })
     
-class GraveImageUpdate(SweetifyMixin, BSModalUpdateView):
+class GraveImageUpdate(StaffRequiredMixin, SweetifyMixin, BSModalUpdateView):
     model = DeceasedInformation
     template_name = 'dashboard/modals/update-grave-image.html'
     success_message = UPDATED_MESSAGE('Image')
@@ -296,7 +315,8 @@ class GraveImageUpdate(SweetifyMixin, BSModalUpdateView):
         context['data'] = DeceasedInformation.objects.get(pk=self.kwargs['pk'])
         return context
 
-@user_passes_test(lambda u: u.is_staff, login_url='Home')    
+@superuser_required
+@require_POST
 def GraveImageDelete(request, pk):
     DeceasedInformation.objects.get(pk=pk).graveimage.delete(save=True)
     sweetify.toast(request, 'Grave Image Deleted', icon='success', timer=2000)
@@ -309,13 +329,13 @@ def GraveImageDelete(request, pk):
 #                                   Locations                                  #
 # ---------------------------------------------------------------------------- #
 
-@user_passes_test(lambda u: u.is_staff, login_url='Home')
+@staff_required
 def renderLocations(request):
     return render(request, 'dashboard/locations.html', {
         'data': Location.objects.all(),
     })
     
-class addLocation(SweetifyMixin, BSModalCreateView):
+class addLocation(StaffRequiredMixin, SweetifyMixin, BSModalCreateView):
     model = Location
     template_name = 'dashboard/modals/add-location.html'
     form_class = LocationForm
@@ -323,7 +343,7 @@ class addLocation(SweetifyMixin, BSModalCreateView):
     sweetify_options = SWEETIFY_ICON_SUCCESS()
     success_url = reverse_lazy('Locations')
         
-class updateLocation(SweetifyMixin, BSModalUpdateView):
+class updateLocation(StaffRequiredMixin, SweetifyMixin, BSModalUpdateView):
     model = Location
     template_name = 'dashboard/modals/update-location.html'
     form_class = LocationForm
@@ -336,7 +356,7 @@ class updateLocation(SweetifyMixin, BSModalUpdateView):
         context['data'] = Location.objects.get(pk=self.kwargs['pk'])
         return context
     
-class deleteLocation(SweetifyMixin, BSModalDeleteView):
+class deleteLocation(SuperuserRequiredMixin, SweetifyMixin, BSModalDeleteView):
     model = Location
     template_name = 'dashboard/modals/delete-location.html'
     success_message = DELETED_MESSAGE('Location')
@@ -354,13 +374,13 @@ class deleteLocation(SweetifyMixin, BSModalDeleteView):
 #                                   Customer                                   #
 # ---------------------------------------------------------------------------- #
 
-@user_passes_test(lambda u: u.is_staff, login_url='Home')
+@staff_required
 def renderCustomer(request):
     return render(request, 'dashboard/customer.html',{
         'data': Customer.objects.all(),
     })
     
-class addCustomer(SweetifyMixin, BSModalCreateView):
+class addCustomer(StaffRequiredMixin, SweetifyMixin, BSModalCreateView):
     model = Customer
     template_name = 'dashboard/modals/add-customer.html'
     form_class = CustomerForm
@@ -368,7 +388,7 @@ class addCustomer(SweetifyMixin, BSModalCreateView):
     sweetify_options = SWEETIFY_ICON_SUCCESS()
     success_url = reverse_lazy('Customer')
         
-class updateCustomer(SweetifyMixin, BSModalUpdateView):
+class updateCustomer(StaffRequiredMixin, SweetifyMixin, BSModalUpdateView):
     model = Customer
     template_name = 'dashboard/modals/update-customer.html'
     form_class = CustomerForm
@@ -381,7 +401,7 @@ class updateCustomer(SweetifyMixin, BSModalUpdateView):
         context['data'] = Customer.objects.get(pk=self.kwargs['pk'])
         return context
     
-class deleteCustomer(SweetifyMixin, BSModalDeleteView):
+class deleteCustomer(SuperuserRequiredMixin, SweetifyMixin, BSModalDeleteView):
     model = Customer
     template_name = 'dashboard/modals/delete-customer.html'
     success_message = DELETED_MESSAGE('Customer')
@@ -399,13 +419,13 @@ class deleteCustomer(SweetifyMixin, BSModalDeleteView):
 #                                Garden Details                                #
 # ---------------------------------------------------------------------------- #
 
-@user_passes_test(lambda u: u.is_staff, login_url='Home')
+@staff_required
 def renderGardenDetails(request):
     return render(request, 'dashboard/garden-details.html',{
         'data': GardenDetail.objects.all()
     })
     
-class addGardenDetail(SweetifyMixin, BSModalCreateView):
+class addGardenDetail(StaffRequiredMixin, SweetifyMixin, BSModalCreateView):
     model = GardenDetail
     template_name = 'dashboard/modals/add-garden-detail.html'
     form_class = GardenDetailForm
@@ -413,7 +433,7 @@ class addGardenDetail(SweetifyMixin, BSModalCreateView):
     sweetify_options = SWEETIFY_ICON_SUCCESS()
     success_url = reverse_lazy('GardenDetails')
 
-class updateGardenDetail(SweetifyMixin, BSModalUpdateView):
+class updateGardenDetail(StaffRequiredMixin, SweetifyMixin, BSModalUpdateView):
     model = GardenDetail
     template_name = 'dashboard/modals/update-garden-detail.html'
     form_class = GardenDetailForm
@@ -426,7 +446,7 @@ class updateGardenDetail(SweetifyMixin, BSModalUpdateView):
         context['data'] = GardenDetail.objects.get(pk=self.kwargs['pk'])
         return context
     
-class deleteGardenDetail(SweetifyMixin, BSModalDeleteView):
+class deleteGardenDetail(SuperuserRequiredMixin, SweetifyMixin, BSModalDeleteView):
     model = GardenDetail
     template_name = 'dashboard/modals/delete-garden-detail.html'
     success_message = DELETED_MESSAGE('Garden Details')
@@ -444,12 +464,14 @@ class deleteGardenDetail(SweetifyMixin, BSModalDeleteView):
 #                                 Garden Images                                #
 # ---------------------------------------------------------------------------- #
 
-@user_passes_test(lambda u: u.is_staff, login_url='Home')
+@staff_required
 def renderGardenImage(request):
     return render(request, 'dashboard/garden-images.html',{
         'data': GardenDetail.objects.all()
     })
     
+@superuser_required
+@require_POST
 def deleteGardenImage(request, pk):
     GardenDetail.objects.get(pk=pk).Lot_Image.delete(save=True)
     sweetify.toast(request, 'Garden Image Deleted', icon='success', timer=2000)
@@ -461,13 +483,13 @@ def deleteGardenImage(request, pk):
 #                                   Lot Types                                  #
 # ---------------------------------------------------------------------------- #
 
-@user_passes_test(lambda u: u.is_staff, login_url='Home')
+@staff_required
 def renderLotTypes(request):
     return render(request, 'dashboard/lot-types.html',{
         'data': LotType.objects.all()
     })
     
-class addLotType(SweetifyMixin, BSModalCreateView):
+class addLotType(StaffRequiredMixin, SweetifyMixin, BSModalCreateView):
     model = LotType
     template_name = 'dashboard/modals/add-lot-type.html'
     form_class = LotTypeForm
@@ -475,7 +497,7 @@ class addLotType(SweetifyMixin, BSModalCreateView):
     sweetify_options = SWEETIFY_ICON_SUCCESS()
     success_url = reverse_lazy('LotTypes')
 
-class UpdateLotType(SweetifyMixin, BSModalUpdateView):
+class UpdateLotType(StaffRequiredMixin, SweetifyMixin, BSModalUpdateView):
     model = LotType
     template_name = 'dashboard/modals/update-lot-type.html'
     form_class = LotTypeForm
@@ -488,7 +510,7 @@ class UpdateLotType(SweetifyMixin, BSModalUpdateView):
         context['data'] = LotType.objects.get(pk=self.kwargs['pk'])
         return context
     
-class DeleteLotType(SweetifyMixin, BSModalDeleteView):
+class DeleteLotType(SuperuserRequiredMixin, SweetifyMixin, BSModalDeleteView):
     model = LotType
     template_name = 'dashboard/modals/delete-lot-type.html'
     success_message = DELETED_MESSAGE('Lot Type')
@@ -513,13 +535,14 @@ class DeleteLotType(SweetifyMixin, BSModalDeleteView):
 
 # ----------------------------------- Users ---------------------------------- #
 
+@staff_required
 def renderUsers(request):
     context = {
         'data': User.objects.filter(Q(is_superuser=False) & Q(is_staff=False)),
     }
     return render(request, 'dashboard/user-accounts.html',context)
 
-class AddUser(SweetifyMixin, BSModalCreateView):
+class AddUser(StaffRequiredMixin, SweetifyMixin, BSModalCreateView):
     model = User
     template_name = 'dashboard/modals/add-user.html'
     form_class = UserForm
@@ -532,14 +555,18 @@ class AddUser(SweetifyMixin, BSModalCreateView):
         form.save()
         return super().form_valid(form)
  
+@staff_required
 def UpdateUser(request, pk):
-    user = User.objects.get(pk=pk)
+    user = get_object_or_404(
+        User.objects.filter(is_staff=False, is_superuser=False),
+        pk=pk,
+    )
     form = UpdateUserForm(instance=user, request=request)
     if request.method == "POST":
         form = UpdateUserForm(request.POST, instance=user, request=request)
         if form.is_valid():
-            if not is_ajax(request.META):
-                new_password = request.POST.get('new_password')
+            if not _is_ajax(request):
+                new_password = form.cleaned_data['new_password']
                 if new_password != '':
                     user.set_password(new_password)
                     user.save()
@@ -548,12 +575,15 @@ def UpdateUser(request, pk):
                 return redirect("SystemUsers")
     return render(request, 'dashboard/modals/update-user.html',{'form':form,'data': user})
     
-class DeleteUser(SweetifyMixin, BSModalDeleteView):
+class DeleteUser(SuperuserRequiredMixin, SweetifyMixin, BSModalDeleteView):
     model = User
     template_name = 'dashboard/modals/delete-user.html'
     success_message = DELETED_MESSAGE('User')
     sweetify_options = SWEETIFY_ICON_SUCCESS()
     success_url = reverse_lazy('SystemUsers')
+
+    def get_queryset(self):
+        return super().get_queryset().filter(is_staff=False, is_superuser=False)
     
     def get_context_data(self, **kwargs):       
         context = super().get_context_data(**kwargs)
@@ -564,18 +594,20 @@ class DeleteUser(SweetifyMixin, BSModalDeleteView):
 
 # ----------------------------------- Staff ---------------------------------- #
 
+@superuser_required
 def renderStaff(request):
     context = {
         'data': User.objects.filter(Q(is_active=True) and Q(is_superuser=True) | Q(is_staff=True)),
     }
     return render(request, 'dashboard/staff-accounts.html',context)
 
+@superuser_required
 def AddStaff(request):
     form = UserForm(request=request)
     if request.method == "POST":
         form = UserForm(request.POST, request=request)
         if form.is_valid():
-            if not is_ajax(request.META):
+            if not _is_ajax(request):
                 staff = request.POST.get('is_staff')
                 admin = request.POST.get('is_superuser')
                 
@@ -594,37 +626,26 @@ def AddStaff(request):
                 return redirect("SystemStaff")
     return render(request, 'dashboard/modals/add-staff.html',{'form':form})
 
+@superuser_required
 def UpdateStaff(request, pk):
     user = User.objects.get(pk=pk)
-    form = UpdateUserForm(instance=user, request=request)
+    form = UpdateStaffForm(instance=user, request=request)
     if request.method == "POST":
-        form = UpdateUserForm(request.POST, instance=user, request=request)
+        form = UpdateStaffForm(request.POST, instance=user, request=request)
         if form.is_valid():
-            if not is_ajax(request.META):
-                staff = request.POST.get('is_staff')
-                admin = request.POST.get('is_superuser')
-                new_password = request.POST.get('new_password')
-                
-                form.instance.is_active = True
-                if staff == 'on':
-                    form.instance.is_staff = True
-                elif admin == 'on':
-                    form.instance.is_staff = True
-                    form.instance.is_superuser = True
-                    
+            if not _is_ajax(request):
+                new_password = form.cleaned_data['new_password']
+
                 if new_password != '':
                     user.set_password(new_password)
                     user.save()
                 
                 form.save()
-                if staff == 'on':
-                    sweetify.toast(request, 'Staff Account Succesfully Updated', icon="success", timer=2000)
-                elif admin == 'on':
-                    sweetify.toast(request, 'Admin Account Succesfully Updated', icon="success", timer=2000)
+                sweetify.toast(request, 'Staff Account Succesfully Updated', icon="success", timer=2000)
                 return redirect("SystemStaff")
     return render(request, 'dashboard/modals/update-staff.html',{'form':form,'data': user})
 
-class DeleteStaff(SweetifyMixin, BSModalDeleteView):
+class DeleteStaff(SuperuserRequiredMixin, SweetifyMixin, BSModalDeleteView):
     model = User
     template_name = 'dashboard/modals/delete-staff.html'
     success_message = DELETED_MESSAGE('User')

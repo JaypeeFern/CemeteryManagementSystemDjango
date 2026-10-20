@@ -3,13 +3,26 @@ from search.models import DeceasedInformation, Location
 from procurement.models import LotType, GardenDetail, Customer
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.password_validation import validate_password
 from bootstrap_modal_forms.forms import BSModalModelForm
+from .upload_validation import validate_upload_size
+
+
+class UploadSizeLimitMixin:
+    upload_fields = ()
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        for field_name in self.upload_fields:
+            self.fields[field_name].validators.append(validate_upload_size)
 
 # ---------------------------------------------------------------------------- #
 #                             Deceased Information                             #
 # ---------------------------------------------------------------------------- #
 
-class DeceasedInfoForm(BSModalModelForm):
+class DeceasedInfoForm(UploadSizeLimitMixin, BSModalModelForm):
+    upload_fields = ('graveimage',)
+
     class Meta:
         model = DeceasedInformation
         fields = ('__all__')
@@ -29,7 +42,9 @@ class DeceasedInfoForm(BSModalModelForm):
 #                                 Grave Images                                 #
 # ---------------------------------------------------------------------------- #
 
-class UpdateGraveImage(BSModalModelForm):
+class UpdateGraveImage(UploadSizeLimitMixin, BSModalModelForm):
+    upload_fields = ('graveimage',)
+
     class Meta:
         model = DeceasedInformation
         fields = ['name', 'graveimage']      
@@ -82,7 +97,9 @@ class CustomerForm(BSModalModelForm):
             'status': forms.Select(attrs={'class': 'form-select'}),
         }
 
-class GardenDetailForm(BSModalModelForm):
+class GardenDetailForm(UploadSizeLimitMixin, BSModalModelForm):
+    upload_fields = ('Lot_Image',)
+
     class Meta:
         model = GardenDetail
         fields = ('__all__')
@@ -94,7 +111,9 @@ class GardenDetailForm(BSModalModelForm):
             'Lot_Type': forms.SelectMultiple(attrs={'class': 'form-select', 'placeholder': '#'})
         }
         
-class LotTypeForm(BSModalModelForm):
+class LotTypeForm(UploadSizeLimitMixin, BSModalModelForm):
+    upload_fields = ('Lot_Photo',)
+
     class Meta:
         model = LotType
         fields = ('__all__')
@@ -147,6 +166,40 @@ class UserForm(BSModalModelForm, UserCreationForm):
         fields=['first_name','username','password1','password2', 'is_active']
         
 class UpdateUserForm(BSModalModelForm):
+    new_password = forms.CharField(
+        required=False,
+        strip=False,
+        widget=forms.PasswordInput(attrs={'class': 'form-control'}),
+    )
+
+    def clean_new_password(self):
+        password = self.cleaned_data['new_password']
+        if password:
+            validate_password(password, self.instance)
+        return password
+
+    class Meta:
+        model = User
+        fields=['first_name','username','is_active']
+        widgets = {
+            'first_name': forms.TextInput(attrs={'type': 'text', 'class': 'form-control', 'placeholder': '#'}),
+            'username': forms.TextInput(attrs={'type': 'text', 'class': 'form-control', 'placeholder': '#'}),
+        }
+
+
+class UpdateStaffForm(BSModalModelForm):
+    new_password = forms.CharField(
+        required=False,
+        strip=False,
+        widget=forms.PasswordInput(attrs={'class': 'form-control'}),
+    )
+
+    def clean_new_password(self):
+        password = self.cleaned_data['new_password']
+        if password:
+            validate_password(password, self.instance)
+        return password
+
     class Meta:
         model = User
         fields=['first_name','username','is_active', 'is_staff', 'is_superuser']
