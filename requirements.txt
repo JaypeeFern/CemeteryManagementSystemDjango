@@ -1,6 +1,6 @@
 asgiref==3.12.1
 branca==0.8.2
-certifi==2026.7.22
+certifi==2026.10.19
 charset-normalizer==3.5.2
 defusedxml==0.7.1
 diff-match-patch==20241021
